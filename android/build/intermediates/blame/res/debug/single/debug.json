@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxxhdpi_ic_astro.png.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-xxxhdpi\\ic_astro.png"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v26_ic_launcher.xml.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-anydpi-v26\\ic_launcher.xml"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-anydpi-v26_ic_launcher_foreground.xml.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-anydpi-v26\\ic_launcher_foreground.xml"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xhdpi_ic_astro.png.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-xhdpi\\ic_astro.png"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi_ic_astro.png.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-mdpi\\ic_astro.png"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi_ic_astro.png.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-hdpi\\ic_astro.png"
+    },
+    {
+        "merged": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\res\\merged\\debug\\drawable-xxhdpi_ic_astro.png.flat",
+        "source": "D:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\res\\drawable-xxhdpi\\ic_astro.png"
+    }
+]
