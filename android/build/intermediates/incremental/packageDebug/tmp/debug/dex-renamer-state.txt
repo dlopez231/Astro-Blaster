@@ -1,4 +1,0 @@
-#Sat Nov 09 18:36:30 PST 2019
-base.0=D\:\\Downloads\\CPSC362-AstroBlaster-master\\CPSC362-AstroBlaster-master\\android\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
