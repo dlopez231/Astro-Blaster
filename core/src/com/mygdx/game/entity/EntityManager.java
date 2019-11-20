@@ -17,14 +17,14 @@ public class EntityManager {
     private final Ship ship;
 
     public EntityManager(int amount, OrthoCamera camera){
-        ship = new Ship(new Vector2(230, 15), new Vector2(0, 0), this, camera);
+        ship = new Ship(new Vector2(20, 240), new Vector2(0, 0), this, camera);
 
         //Enemies appear from top, will figure out how to do this landscape later
         for (int i = 0; i < amount; i++){
-            float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.ENEMY1.getWidth());
-            float y = MathUtils.random(MainGame.HEIGHT, MainGame.HEIGHT * 3);
+            float x = MathUtils.random(MainGame.WIDTH, MainGame.WIDTH * 3);
+            float y = MathUtils.random(0, MainGame.HEIGHT - TextureManager.ENEMY1.getHeight());
             float speed = MathUtils.random(2, 5);
-            addEntity(new Enemy1(new Vector2(x, y), new Vector2(0, -speed)));
+            addEntity(new Enemy1(new Vector2(x, y), new Vector2(-speed, 0)));
         }
     }
 

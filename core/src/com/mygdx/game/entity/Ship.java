@@ -27,7 +27,7 @@ public class Ship extends SpriteEntity{
         int direction = 0;
         if(Gdx.input.isTouched()){
                 Vector2 touch = camera.unprojectCoordinates(Gdx.input.getX(), Gdx.input.getY());
-                if(touch.x > MainGame.WIDTH / 2){
+                if(touch.y > MainGame.HEIGHT / 2){
                     direction = 2;
                 }
                 else{
@@ -37,12 +37,12 @@ public class Ship extends SpriteEntity{
         }
 
         //To test with desktop
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || direction == 1){
-            setDirection(-300, 0);
+        if(Gdx.input.isKeyPressed(Input.Keys.UP) || direction == 1){
+            setDirection(0, -300);
         }
 
-        else if(Gdx.input.isKeyPressed(Input.Keys.D) || direction == 2){
-            setDirection(300, 0);
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN) || direction == 2){
+            setDirection(0, 300);
         }
 
         else{
@@ -52,7 +52,7 @@ public class Ship extends SpriteEntity{
 
         //if(Gdx.input.isKeyPressed(Input.Keys.SPACE)){
             if(System.currentTimeMillis() - lastFire >= 350) {
-                entityManager.addEntity(new Bullet(position.cpy().add(25, TextureManager.SHIP.getHeight())));
+                entityManager.addEntity(new Bullet(position.cpy().add(TextureManager.SHIP.getHeight(),25)));
                 lastFire = System.currentTimeMillis();
             }
 
