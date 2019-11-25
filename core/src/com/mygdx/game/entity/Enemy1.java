@@ -17,9 +17,9 @@ public class Enemy1 extends SpriteEntity {
 
         position.add(direction);
 
-        if(position.y <= -TextureManager.ENEMY1.getHeight()){
-            float x = MathUtils.random(0, MainGame.WIDTH - TextureManager.ENEMY1.getWidth());
-            position.set(x, MainGame.HEIGHT);
+        if(position.x <= -TextureManager.ENEMY1.getWidth()){
+            float y = MathUtils.random(0, MainGame.HEIGHT - TextureManager.ENEMY1.getHeight());
+            position.set(MainGame.WIDTH, y);
         }
 
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.screen.GameScreen;
+import com.mygdx.game.screen.MenuScreen;
 import com.mygdx.game.screen.ScreenManager;
 
 public class MainGame extends ApplicationAdapter {
@@ -20,16 +21,12 @@ public class MainGame extends ApplicationAdapter {
 
 		batch = new SpriteBatch();
 
-		ScreenManager.setScreen(new GameScreen());
+		ScreenManager.setScreen(new MenuScreen());
 	}
 
 	@Override
 	public void render () {
 
-		//Set screen to white
-		Gdx.gl.glClearColor(1, 1, 1, 1);
-		//Helps with buffer
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		if (ScreenManager.getCurrentScreen() != null){
 			ScreenManager.getCurrentScreen().update();
@@ -41,7 +38,6 @@ public class MainGame extends ApplicationAdapter {
 
 	}
 
-	//Called when app close
 	@Override
 	public void dispose () {
 
@@ -49,6 +45,7 @@ public class MainGame extends ApplicationAdapter {
 			ScreenManager.getCurrentScreen().dispose();
 			batch.dispose();
 		}
+		batch.dispose();
 	}
 
 	@Override

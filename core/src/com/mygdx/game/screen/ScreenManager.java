@@ -1,5 +1,7 @@
 package com.mygdx.game.screen;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 public class ScreenManager {
 
     public static Screen currentScreen;
