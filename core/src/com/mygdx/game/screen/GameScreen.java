@@ -20,7 +20,6 @@ public class GameScreen extends Screen{
 
         //First param determines number of enemies
         entityManager = new EntityManager(10, camera);
-        Assets.load();
 
     }
 
