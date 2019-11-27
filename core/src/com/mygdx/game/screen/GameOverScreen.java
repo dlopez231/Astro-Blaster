@@ -2,8 +2,8 @@ package com.mygdx.game.screen;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.mygdx.game.Assets;
 import com.mygdx.game.MainGame;
-import com.mygdx.game.TextureManager;
 import com.mygdx.game.camera.OrthoCamera;
 
 public class GameOverScreen extends Screen{
@@ -11,12 +11,13 @@ public class GameOverScreen extends Screen{
     private OrthoCamera camera;
     private Texture texture;
 
+    //Boolean to determine which screen to show
     public GameOverScreen(boolean win){
         if(win){
-            texture = TextureManager.GAME_WON;
+            texture = Assets.GAME_WON;
         }
         else{
-            texture = TextureManager.GAME_LOST;
+            texture = Assets.GAME_LOST;
         }
     }
 
@@ -37,6 +38,8 @@ public class GameOverScreen extends Screen{
     public void render(SpriteBatch sb) {
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
+
+        //Game over screens set to middle
         sb.draw(texture, MainGame.WIDTH / 2 - texture.getWidth() / 2, MainGame.HEIGHT / 2 - texture.getHeight() / 2);
         sb.end();
 
@@ -63,4 +66,5 @@ public class GameOverScreen extends Screen{
     public void resume() {
 
     }
+
 }

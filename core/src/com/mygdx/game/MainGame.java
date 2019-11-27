@@ -10,7 +10,7 @@ import com.mygdx.game.screen.ScreenManager;
 
 public class MainGame extends ApplicationAdapter {
 
-	//Portrait screen
+	//Landscape screen
 	public static int WIDTH = 800, HEIGHT = 480;
 
 	private SpriteBatch batch;

@@ -3,7 +3,7 @@ package com.mygdx.game.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.MainGame;
+import com.mygdx.game.Assets;
 import com.mygdx.game.camera.OrthoCamera;
 import com.mygdx.game.entity.EntityManager;
 
@@ -17,7 +17,10 @@ public class GameScreen extends Screen{
     public void create() {
 
         camera = new OrthoCamera();
+
+        //First param determines number of enemies
         entityManager = new EntityManager(10, camera);
+        Assets.load();
 
     }
 
@@ -30,11 +33,14 @@ public class GameScreen extends Screen{
     @Override
     public void render(SpriteBatch sb) {
 
-        Gdx.gl.glClearColor(0, 0, 1,0);
+        //Sets background to black
+        Gdx.gl.glClearColor(0, 0, 0,0);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         sb.setProjectionMatrix(camera.combined);
         sb.begin();
+
+        //Render stuff from entity manager
         entityManager.render(sb);
         sb.end();
 
@@ -61,4 +67,5 @@ public class GameScreen extends Screen{
     public void resume() {
 
     }
+
 }
