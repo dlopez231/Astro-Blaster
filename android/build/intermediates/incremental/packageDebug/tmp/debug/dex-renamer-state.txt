@@ -1,4 +1,4 @@
-#Mon Nov 18 01:08:49 PST 2019
-base.0=E\:\\Programming Stuff\\AstroBlasterPrototype1\\android\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out
+#Fri Nov 29 00:31:26 PST 2019
+base.0=C\:\\Users\\Dianne Lopez\\Desktop\\AstroBlasterPrototype2\\android\\build\\intermediates\\dex\\debug\\mergeDexDebug\\out
 path.0=classes.dex
 renamed.0=classes.dex
