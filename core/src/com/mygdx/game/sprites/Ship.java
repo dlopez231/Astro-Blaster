@@ -29,7 +29,9 @@ public class Ship{
 
     public void update(float delta){
 
+
         position.add(0, direction.y);
+
 
         if (position.y < 0){
             position.y = 0;
@@ -53,7 +55,7 @@ public class Ship{
 
 
     public void setDirection(float x, float y){
-        direction.set(0, y/20);
+        direction.set(0, y/10);
 
     }
 

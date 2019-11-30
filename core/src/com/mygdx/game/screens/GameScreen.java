@@ -4,7 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AstroBlaster;
 import com.mygdx.game.sprites.Bullet;
@@ -20,6 +24,11 @@ public class GameScreen extends Screens{
 
     private Ship ship;
 
+    private Texture pauseButton;
+
+    private Texture pauseBG;
+    private Texture resumeButton;
+
     private String shipHealth;
     private int currentHealth;
     private BitmapFont healthBM;
@@ -31,8 +40,17 @@ public class GameScreen extends Screens{
     private Array<Enemy1> enemies1;
     private Array<Bullet> bullets;
 
+
     private int bgX = 0;
 
+
+    public enum State{
+        PAUSE,
+        RUN
+
+    }
+
+    State state = State.RUN;
 
     public GameScreen(ScreenManager sm) {
         super(sm);
@@ -50,8 +68,13 @@ public class GameScreen extends Screens{
         ship = new Ship(20, 230);
         background = new Texture("background2.png");
 
+        pauseButton = new Texture("pause.png");
+
         enemies1 = new Array<Enemy1>();
         bullets = new Array<Bullet>();
+
+        pauseBG = new Texture("transparentBG.png");
+        resumeButton = new Texture("resume.png");
 
         for (int i = 0; i < enemies1_count; i++){
 
@@ -69,12 +92,33 @@ public class GameScreen extends Screens{
             Vector3 touchPos = new Vector3();
             touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(touchPos);
+
+            Rectangle pauseButtonBounds = new Rectangle(AstroBlaster.WIDTH - pauseButton.getWidth() - 10, 5, pauseButton.getWidth(), pauseButton.getHeight());
+
+
+            if(pauseButtonBounds.contains(touchPos.x, touchPos.y)){
+                System.out.println("Pause is touched");
+                pause();
+
+            }
+
             if(touchPos.y > AstroBlaster.HEIGHT/2){
                 ship.setDirection(0,(touchPos.y - ship.getTexture().getHeight() / 2) - AstroBlaster.HEIGHT/2);
             }
             else{
                 ship.setDirection(0, -(AstroBlaster.HEIGHT/2 - (touchPos.y - ship.getTexture().getHeight() / 2)));
             }
+
+            if(this.state == State.PAUSE){
+                Rectangle resumeButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), (AstroBlaster.HEIGHT/2) - (resumeButton.getHeight()/2), resumeButton.getWidth(), resumeButton.getHeight());
+
+                if(resumeButtonBounds.contains(touchPos.x, touchPos.y)){
+                    System.out.println("Resume is touched");
+                    resume();
+                }
+
+            }
+
         }
 
     }
@@ -84,55 +128,67 @@ public class GameScreen extends Screens{
 
         handleInput();
 
-        background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        switch (state){
 
-        bgX += 1;
+            case RUN:
 
-        for(Enemy1 e1 : enemies1) {
-            e1.update();
+                background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
-            if(e1.collides(ship.getBounds())){
-                currentHealth--;
-                shipHealth = "Ship Health: " + currentHealth;
-                enemies1.removeValue(e1, false);
-            }
-        }
+                bgX += 1;
 
-        if(currentHealth == 0){
-            sm.setScreen(new GameOverScreen(sm, false));
-        }
+                for(Enemy1 e1 : enemies1) {
+                    e1.update();
 
-        if(System.currentTimeMillis() - lastFire >= 400){
-            bullets.add(new Bullet(ship.getPosition().x + ship.getTexture().getWidth(), ship.getPosition().y + ship.getTexture().getHeight()/2));
-            lastFire = System.currentTimeMillis();
-        }
-
-        for(Bullet b : bullets){
-            b.update();
-            if(b.checkEnd()){
-                bullets.removeValue(b, false);
-
-            }
-        }
-
-        for(Enemy1 e1 : enemies1){
-            for(Bullet b : bullets){
-                if(b.collides(e1.getBounds())){
-                    enemies1.removeValue(e1, false);
-                    bullets.removeValue(b, false);
-                    currentScore += 300;
-                    score = "Score: " + currentScore;
-
+                    if(e1.collides(ship.getBounds())){
+                        currentHealth--;
+                        shipHealth = "Ship Health: " + currentHealth;
+                        enemies1.removeValue(e1, false);
+                    }
                 }
-            }
+
+                if(currentHealth == 0){
+                    sm.setScreen(new GameOverScreen(sm, false));
+                }
+
+                if(System.currentTimeMillis() - lastFire >= 400){
+                    bullets.add(new Bullet(ship.getPosition().x + ship.getTexture().getWidth(), ship.getPosition().y + ship.getTexture().getHeight()/2));
+                    lastFire = System.currentTimeMillis();
+                }
+
+                for(Bullet b : bullets){
+                    b.update();
+                    if(b.checkEnd()){
+                        bullets.removeValue(b, false);
+
+                    }
+                }
+
+                for(Enemy1 e1 : enemies1){
+                    for(Bullet b : bullets){
+                        if(b.collides(e1.getBounds())){
+                            enemies1.removeValue(e1, false);
+                            bullets.removeValue(b, false);
+                            currentScore += 300;
+                            score = "Score: " + currentScore;
+
+                        }
+                    }
+                }
+
+                if(gameOver()){
+
+                    sm.setScreen(new GameOverScreen(sm, true));
+                }
+
+                ship.update(delta);
+
+                break;
+
+            case PAUSE:
+                break;
+
         }
 
-        if(gameOver()){
-
-            sm.setScreen(new GameOverScreen(sm, true));
-        }
-
-        ship.update(delta);
     }
 
     @Override
@@ -154,13 +210,23 @@ public class GameScreen extends Screens{
             sb.draw(b.getTexture(), b.getPosition().x, b.getPosition().y);
         }
 
+        sb.draw(pauseButton, AstroBlaster.WIDTH - pauseButton.getWidth() - 10, 5);
+
         healthBM.setColor(1, 1, 1, 1);
         healthBM.draw(sb, shipHealth, 10, 470);
 
         scoreBM.setColor(1, 1, 1, 1);
         scoreBM.draw(sb, score, 700, 470);
 
+        if(this.state == state.PAUSE){
+
+            sb.draw(pauseBG, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
+            sb.draw(resumeButton, (AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), (AstroBlaster.HEIGHT/2) - (resumeButton.getHeight()/2));
+
+        }
+
         sb.end();
+
 
     }
 
@@ -182,6 +248,21 @@ public class GameScreen extends Screens{
 
     }
 
+    public void pause() {
+        this.state = State.PAUSE;
+
+    }
+
+    public void resume(){
+
+        if(this.state == State.PAUSE){
+            this.state = State.RUN;
+
+        }
+
+    }
+
+
     @Override
     public void dispose() {
 
@@ -198,7 +279,11 @@ public class GameScreen extends Screens{
 
         }
 
+        pauseBG.dispose();
+        resumeButton.dispose();
+
         System.out.println("Game Screen disposed");
 
     }
+
 }

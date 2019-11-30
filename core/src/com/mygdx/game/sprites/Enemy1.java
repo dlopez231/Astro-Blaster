@@ -38,6 +38,7 @@ public class Enemy1 {
 
         position.add(direction);
 
+
         if(position.x <= -enemy1.getWidth()){
             float y = MathUtils.random(0, AstroBlaster.HEIGHT - enemy1.getHeight());
             position.set(AstroBlaster.WIDTH, y);
