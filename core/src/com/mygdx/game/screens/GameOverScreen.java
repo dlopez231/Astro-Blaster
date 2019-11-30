@@ -10,26 +10,19 @@ import com.mygdx.game.AstroBlaster;
 public class GameOverScreen extends Screens{
 
     private Texture background;
-    private Texture gameStatus;
+    private Texture gameOver;
     private Texture replayButton;
     private Texture homeButton;
     private Texture quitButton;
 
-    public GameOverScreen(ScreenManager sm, boolean won)    {
+    public GameOverScreen(ScreenManager sm)    {
         super(sm);
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
         background = new Texture("background2.png");
 
-        if(won){
-            gameStatus = new Texture("win.png");
-        }
-
-        else{
-            gameStatus = new Texture("lost.png");
-        }
-
+        gameOver = new Texture("gameover.png");
         replayButton = new Texture("replay.png");
         homeButton = new Texture("home.png");
         quitButton = new Texture("QuitButton.png");
@@ -82,7 +75,7 @@ public class GameOverScreen extends Screens{
 
         sb.begin();
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-        sb.draw(gameStatus, (AstroBlaster.WIDTH/2) - (gameStatus.getWidth() / 2), 360);
+        sb.draw(gameOver, (AstroBlaster.WIDTH/2) - (gameOver.getWidth() / 2), 360);
         sb.draw(replayButton, (AstroBlaster.WIDTH/2) - (replayButton.getWidth()/2), 200);
         sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150);
         sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 100);
@@ -95,7 +88,7 @@ public class GameOverScreen extends Screens{
     public void dispose() {
 
         background.dispose();
-        gameStatus.dispose();
+        gameOver.dispose();
         replayButton.dispose();
         homeButton.dispose();
         quitButton.dispose();

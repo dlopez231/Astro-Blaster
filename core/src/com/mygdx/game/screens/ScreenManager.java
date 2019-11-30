@@ -39,4 +39,8 @@ public class ScreenManager {
 
     }
 
+    public void getCurrentScreen(){
+        screens.peek();
+    }
+
 }

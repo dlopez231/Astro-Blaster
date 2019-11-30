@@ -1,5 +1,7 @@
 package com.mygdx.game.sprites;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -15,10 +17,11 @@ public class Bullet {
 
     private Rectangle bullet_hitbox;
 
+
     public Bullet(float x, float y){
 
         position = new Vector2(x, y);
-        direction = new Vector2(+5, 0);
+        direction = new Vector2(+7, 0);
 
         bullet = new Texture("bullet.png");
 
@@ -58,6 +61,7 @@ public class Bullet {
     public Rectangle getBounds(){
         return bullet_hitbox;
     }
+
 
 
 }

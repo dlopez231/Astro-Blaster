@@ -1,6 +1,7 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,6 +17,8 @@ public class MenuScreen extends Screens{
     private Texture scoreButton;
     private Texture quitButton;
 
+    private Music menuTheme;
+
     public MenuScreen(ScreenManager sm){
         super(sm);
 
@@ -27,6 +30,12 @@ public class MenuScreen extends Screens{
 //        tutorialButton = new Texture("tutorialButton.png");
         scoreButton = new Texture("ScoreButton.png");
         quitButton = new Texture("QuitButton.png");
+
+        menuTheme = Gdx.audio.newMusic(Gdx.files.internal("menuTheme.mp3"));
+        menuTheme.setLooping(true);
+        menuTheme.setVolume(0.1f);
+        menuTheme.play();
+
     }
 
     @Override
@@ -94,6 +103,7 @@ public class MenuScreen extends Screens{
         playButton.dispose();
         scoreButton.dispose();
         quitButton.dispose();
+        menuTheme.dispose();
 
         System.out.println("Menu Screen disposed");
 

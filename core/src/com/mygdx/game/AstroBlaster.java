@@ -25,6 +25,7 @@ public class AstroBlaster extends ApplicationAdapter {
 
 		Gdx.gl.glClearColor(0, 0, 0, 0);
 
+
 		sm.pushScreen(new MenuScreen(sm));
 	}
 
