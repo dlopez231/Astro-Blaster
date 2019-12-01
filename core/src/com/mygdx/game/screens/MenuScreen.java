@@ -33,7 +33,7 @@ public class MenuScreen extends Screens{
 
         menuTheme = Gdx.audio.newMusic(Gdx.files.internal("menuTheme.mp3"));
         menuTheme.setLooping(true);
-        menuTheme.setVolume(0.1f);
+        menuTheme.setVolume(0.4f);
         menuTheme.play();
 
     }
@@ -51,7 +51,6 @@ public class MenuScreen extends Screens{
             Rectangle quitButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - quitButton.getWidth() / 2, 100, quitButton.getWidth(), quitButton.getHeight());
 
             if (playButtonBounds.contains(touchPos.x, touchPos.y)) {
-                System.out.println("Play is touched");
                 sm.setScreen(new GameScreen(sm));
             }
 
@@ -61,12 +60,10 @@ public class MenuScreen extends Screens{
 //            }
 
             if(scoreButtonBounds.contains(touchPos.x, touchPos.y)) {
-                System.out.println("Scores is touched");
 //                sm.setScreen(new ScoresScreen(sm));
             }
 
             if(quitButtonBounds.contains(touchPos.x, touchPos.y)) {
-                System.out.println("Quit is touched");
                 dispose();
                 Gdx.app.exit();
             }

@@ -55,7 +55,7 @@ public class Ship{
 
 
     public void setDirection(float x, float y){
-        direction.set(0, y/10);
+        direction.set(0, y/20);
 
     }
 
