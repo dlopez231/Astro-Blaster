@@ -2,6 +2,8 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -14,8 +16,11 @@ public class GameOverScreen extends Screens{
     private Texture replayButton;
     private Texture homeButton;
     private Texture quitButton;
+    private String finalScore;
+    private BitmapFont scoreFont;
 
-    public GameOverScreen(ScreenManager sm)    {
+
+    public GameOverScreen(ScreenManager sm, int score)    {
         super(sm);
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
@@ -26,6 +31,13 @@ public class GameOverScreen extends Screens{
         replayButton = new Texture("replay.png");
         homeButton = new Texture("home.png");
         quitButton = new Texture("QuitButton.png");
+        finalScore = "FINAL SCORE: " + score;
+        scoreFont = new BitmapFont(Gdx.files.internal("myFont.fnt"), Gdx.files.internal("myFont.png"), false);
+        scoreFont.getData().setScale(0.7f,0.7f);
+
+        loadScores();
+        addScore(score);
+        saveScores();
 
     }
 
@@ -79,8 +91,63 @@ public class GameOverScreen extends Screens{
         sb.draw(replayButton, (AstroBlaster.WIDTH/2) - (replayButton.getWidth()/2), 200);
         sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150);
         sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 100);
+
+        GlyphLayout gl = new GlyphLayout();
+        gl.setText(scoreFont, finalScore);
+        float temp = gl.width;
+        scoreFont.draw(sb, finalScore, (AstroBlaster.WIDTH / 2) - (temp / 2), 300);
+
         sb.end();
 
+
+    }
+
+    public void addScore(int newScore){
+
+        for(int i = 0; i < highScores.size(); i++){
+
+            int temp = highScores.get(i);
+
+            if(newScore > temp){
+
+
+                highScores.add(i, newScore);
+
+
+                if(highScores.size() > 5){
+
+                    highScores.remove(5);
+                }
+
+
+                break;
+
+            }
+
+        }
+
+
+    }
+
+    public void loadScores(){
+
+        highScores.add(myPrefs.getInteger("score_1", 0));
+        highScores.add(myPrefs.getInteger("score_2", 0));
+        highScores.add(myPrefs.getInteger("score_3", 0));
+        highScores.add(myPrefs.getInteger("score_4", 0));
+        highScores.add(myPrefs.getInteger("score_5", 0));
+
+    }
+
+    public void saveScores(){
+
+        myPrefs.putInteger("score_1", highScores.get(0));
+        myPrefs.putInteger("score_2", highScores.get(1));
+        myPrefs.putInteger("score_3", highScores.get(2));
+        myPrefs.putInteger("score_4", highScores.get(3));
+        myPrefs.putInteger("score_5", highScores.get(4));
+
+        myPrefs.flush();
 
     }
 

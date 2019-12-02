@@ -60,7 +60,7 @@ public class MenuScreen extends Screens{
 //            }
 
             if(scoreButtonBounds.contains(touchPos.x, touchPos.y)) {
-//                sm.setScreen(new ScoresScreen(sm));
+                sm.setScreen(new ScoreScreen(sm));
             }
 
             if(quitButtonBounds.contains(touchPos.x, touchPos.y)) {
@@ -92,6 +92,8 @@ public class MenuScreen extends Screens{
         sb.end();
 
     }
+
+
 
     @Override
     public void dispose() {

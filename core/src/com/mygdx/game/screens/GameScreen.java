@@ -8,10 +8,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.AstroBlaster;
 import com.mygdx.game.sprites.Bullet;
 import com.mygdx.game.sprites.Enemy;
 import com.mygdx.game.sprites.Ship;
+
+import java.util.ArrayList;
 
 public class GameScreen extends Screens{
 
@@ -49,11 +52,9 @@ public class GameScreen extends Screens{
     private float elapsed;
     private float spawnTime;
 
-
     public enum State{
         PAUSE,
         RUN
-
     }
 
     State state = State.RUN;
@@ -66,8 +67,6 @@ public class GameScreen extends Screens{
         currentHealth = 3;
         shipHealth = "Ship Health: " + currentHealth;
         healthBM = new BitmapFont();
-
-//        enemy1Health = 3;
 
         currentScore = 0;
         score = "Score: " + currentScore;
@@ -91,8 +90,6 @@ public class GameScreen extends Screens{
         shipDies = Gdx.audio.newSound(Gdx.files.internal("playerdies.ogg"));
 
 
-
-
     }
 
     @Override
@@ -105,18 +102,20 @@ public class GameScreen extends Screens{
             camera.unproject(touchPos);
 
             Rectangle pauseButtonBounds = new Rectangle(AstroBlaster.WIDTH - pauseButton.getWidth() + 10,10, pauseButton.getWidth(), pauseButton.getHeight());
+            Rectangle shipTouchBounds = new Rectangle(0, 0, AstroBlaster.WIDTH/2, AstroBlaster.HEIGHT);
 
             if(pauseButtonBounds.contains(touchPos.x, touchPos.y)){
                 pause();
             }
 
-            if(touchPos.y > (ship.getPosition().y + ship.getTexture().getHeight()/2)){
-                ship.setDirection(0,touchPos.y - (ship.getPosition().y + (ship.getTexture().getHeight()/2)));
-                fire();
-            }
-            else{
-                ship.setDirection(0, -((ship.getPosition().y + (ship.getTexture().getHeight()/2)) - touchPos.y));
-                fire();
+            if(shipTouchBounds.contains(touchPos.x, touchPos.y)) {
+                if (touchPos.y > (ship.getPosition().y + ship.getTexture().getHeight() / 2)) {
+                    ship.setDirection(0, touchPos.y - (ship.getPosition().y + (ship.getTexture().getHeight() / 2)));
+                    fire();
+                } else {
+                    ship.setDirection(0, -((ship.getPosition().y + (ship.getTexture().getHeight() / 2)) - touchPos.y));
+                    fire();
+                }
             }
 
 
@@ -137,7 +136,6 @@ public class GameScreen extends Screens{
                     dispose();
                     Gdx.app.exit();
                 }
-
 
             }
 
@@ -166,15 +164,13 @@ public class GameScreen extends Screens{
                 while(spawnTime >= 1f && getEnemies().size <= 10) {
 
                     enemies.add(new Enemy());
-
                     spawnTime -= 1f;
                 }
-
 
                 for(Enemy e1 : enemies) {
                     e1.update();
 
-                    if(e1.collides(ship.getBounds())){
+                    if(currentHealth > 0 && e1.collides(ship.getBounds())){
                         currentHealth--;
                         shipHealth = "Ship Health: " + currentHealth;
 
@@ -190,9 +186,16 @@ public class GameScreen extends Screens{
                 if(currentHealth <= 0){
                     //sound is causing weird bug
 //                    shipDies.play(0.3f);
+
+//                    int highScore = myPrefs.getInteger("HighScore", 0);
+//                    if(highScore < currentScore){
+//                        myPrefs.putInteger("LastScore", currentScore);
+//                        myPrefs.flush();
+//                    }
                     elapsed += delta;
                     if(elapsed > 2.0) {
-                        sm.setScreen(new GameOverScreen(sm));
+
+                        sm.setScreen(new GameOverScreen(sm, currentScore));
                     }
                 }
 
@@ -207,6 +210,7 @@ public class GameScreen extends Screens{
 
                 for(Enemy e1 : enemies){
                     for(Bullet b : bullets){
+
                         if(b.collides(e1.getBounds())){
                             e1.subtractHP(1);
                             bullets.removeValue(b, false);
@@ -217,21 +221,16 @@ public class GameScreen extends Screens{
                                 currentScore += 300;
                                 score = "Score: " + currentScore;
                             }
-
                         }
                     }
                 }
-
-
                 ship.update(delta);
-
                 break;
 
             case PAUSE:
                 break;
 
         }
-
     }
 
     @Override
@@ -243,18 +242,17 @@ public class GameScreen extends Screens{
 
         sb.draw(background, 0, 0, bgX, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
-        sb.draw(ship.getTexture(), ship.getPosition().x, ship.getPosition().y);
-
         for(Enemy e : enemies) {
             sb.draw(e.getTexture(), e.getPosition().x, e.getPosition().y);
         }
+
+        sb.draw(ship.getTexture(), ship.getPosition().x, ship.getPosition().y);
 
         for(Bullet b : bullets) {
             sb.draw(b.getTexture(), b.getPosition().x, b.getPosition().y);
         }
 
-        sb.draw(pauseButton, AstroBlaster.WIDTH - pauseButton.getWidth() + 10,10);
-
+        sb.draw(pauseButton, AstroBlaster.WIDTH - pauseButton.getWidth() - 10,10);
 
         healthBM.setColor(1, 1, 1, 1);
         healthBM.draw(sb, shipHealth, 10, 470);
@@ -270,9 +268,7 @@ public class GameScreen extends Screens{
             sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 100);
 
         }
-
         sb.end();
-
 
     }
 
@@ -295,9 +291,11 @@ public class GameScreen extends Screens{
             bullets.add(new Bullet(ship.getPosition().x + ship.getTexture().getWidth(), ship.getPosition().y + ship.getTexture().getHeight()/2));
             laser.play(0.1f);
             lastFire = System.currentTimeMillis();
-        }
 
+        }
     }
+
+
 
     public void pause() {
         this.state = State.PAUSE;
@@ -310,10 +308,7 @@ public class GameScreen extends Screens{
             this.state = State.RUN;
 
         }
-
     }
-
-
 
     @Override
     public void dispose() {
@@ -330,7 +325,6 @@ public class GameScreen extends Screens{
             b.dispose();
 
         }
-
         pauseBG.dispose();
         resumeButton.dispose();
         homeButton.dispose();

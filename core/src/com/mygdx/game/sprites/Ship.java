@@ -3,7 +3,6 @@ package com.mygdx.game.sprites;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.AstroBlaster;
 
 public class Ship{
@@ -15,7 +14,6 @@ public class Ship{
     private Texture ship;
 
     private Rectangle ship_hitbox;
-
 
     public Ship(int x, int y){
 
@@ -29,9 +27,7 @@ public class Ship{
 
     public void update(float delta){
 
-
         position.add(0, direction.y);
-
 
         if (position.y < 0){
             position.y = 0;
