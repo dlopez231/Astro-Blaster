@@ -22,16 +22,26 @@ public class Enemy {
     public Enemy(){
         enemy = new Texture("enemy.png");
 
+        // Random enemy spawn coordinates
+        // Enemies spawn in edge of screen times 1/3rd of screen width size
         float x = MathUtils.random(AstroBlaster.WIDTH + enemy.getWidth(), AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
+
+        // Enemies spawn in randomm height of screen
         float y = MathUtils.random(0, AstroBlaster.HEIGHT - enemy.getHeight());
 
+        // Random speed of enemy
         float speed = MathUtils.random(3, 6);
 
+        // Set up position
         position = new Vector2(x, y);
+
+        // Negative speed to move to left
         direction = new Vector2(-speed, 0);
 
+        // Update bounds along with enemy texture coordinates
         enemyHitbox = new Rectangle(position.x, position.y, enemy.getWidth(), enemy.getHeight());
 
+        // Enemies have 3 health
         health = 3;
 
     }
@@ -40,7 +50,7 @@ public class Enemy {
 
         position.add(direction);
 
-
+        // Enemies that reach end of screen in left side respawn in right
         if(position.x <= -enemy.getWidth()){
             float y = MathUtils.random(0, AstroBlaster.HEIGHT - enemy.getHeight());
             position.set(AstroBlaster.WIDTH, y);

@@ -10,16 +10,20 @@ import com.badlogic.gdx.utils.Json;
 
 import java.util.ArrayList;
 
+// Abstract class for all screens to use
 public abstract class Screens {
 
+    // Camera helps with game screen
     protected OrthographicCamera camera;
 
     protected Vector3 input;
 
     protected ScreenManager sm;
 
+    // Preferences to save scores in
     protected Preferences myPrefs;
 
+    // ArrayList to store high scores
     public ArrayList<Integer> highScores;
 
     protected Screens(ScreenManager sm){
@@ -29,8 +33,6 @@ public abstract class Screens {
         input = new Vector3();
         myPrefs = Gdx.app.getPreferences("Game Scores");
         highScores = new ArrayList<Integer>();
-
-
 
     }
 

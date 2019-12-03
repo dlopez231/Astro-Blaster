@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.Stack;
 
+// Screen helper
+// Screens will work like a stack
 public class ScreenManager {
 
     private Stack<Screens> screens;

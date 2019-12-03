@@ -19,6 +19,8 @@ public class Bullet {
     public Bullet(float x, float y){
 
         position = new Vector2(x, y);
+
+        // Speed of bullet
         direction = new Vector2(+7, 0);
 
         bullet = new Texture("bullet.png");

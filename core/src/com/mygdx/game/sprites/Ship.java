@@ -27,8 +27,10 @@ public class Ship{
 
     public void update(float delta){
 
+        // Move ship based on direction
         position.add(0, direction.y);
 
+        // Stop ship movement if it's touching screen bounds
         if (position.y < 0){
             position.y = 0;
         }
@@ -36,6 +38,7 @@ public class Ship{
             position.y = AstroBlaster.HEIGHT - ship.getHeight();
         }
 
+        // Update ship bounds along with ship texture position
         ship_hitbox.setPosition(position.x, position.y);
 
     }
@@ -51,6 +54,8 @@ public class Ship{
 
 
     public void setDirection(float x, float y){
+
+        // Ship direction is slowed down
         direction.set(0, y/20);
 
     }

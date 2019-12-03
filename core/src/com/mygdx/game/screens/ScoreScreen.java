@@ -10,6 +10,7 @@ import com.mygdx.game.AstroBlaster;
 
 public class ScoreScreen extends Screens {
 
+    // Textures for scoreboard screen
     private Texture background;
     private String score_1;
     private String score_2;
@@ -25,12 +26,14 @@ public class ScoreScreen extends Screens {
 
         background = new Texture("background2.png");
 
+        // Get high scores and store them in string
         score_1 = "Score 1: " + myPrefs.getInteger("score_1");
         score_2 = "Score 2: " + myPrefs.getInteger("score_2");
         score_3 = "Score 3: " + myPrefs.getInteger("score_3");
         score_4 = "Score 4: " + myPrefs.getInteger("score_4");
         score_5 = "Score 5: " + myPrefs.getInteger("score_5");
 
+        // Custom font
         scoreFont = new BitmapFont(Gdx.files.internal("myFont.fnt"), Gdx.files.internal("myFont.png"), false);
         scoreFont.getData().setScale(0.7f,0.7f);
 
@@ -52,6 +55,7 @@ public class ScoreScreen extends Screens {
 
         sb.setProjectionMatrix(camera.combined);
 
+        // Draw scores
         sb.begin();
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
