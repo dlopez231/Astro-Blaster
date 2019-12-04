@@ -31,7 +31,7 @@ public class GameOverScreen extends Screens{
         gameOver = new Texture("gameover.png");
         replayButton = new Texture("replay.png");
         homeButton = new Texture("home.png");
-        quitButton = new Texture("QuitButton.png");
+        quitButton = new Texture("Quit Button.png");
         finalScore = "FINAL SCORE: " + score;
         scoreFont = new BitmapFont(Gdx.files.internal("myFont.fnt"), Gdx.files.internal("myFont.png"), false);
         scoreFont.getData().setScale(0.7f,0.7f);

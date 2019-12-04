@@ -3,18 +3,26 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.AstroBlaster;
+import com.mygdx.game.sprites.GifDecoder;
 
 public class MenuScreen extends Screens{
 
     // Textures for the menu screen
-    private Texture title;
+//    private Texture title;
+
+    private Animation<TextureRegion> title;
+    private float elapsed;
+
+
     private Texture background;
-    private Texture playButton;
-//    private Texture tutorialButton;
+    private Texture startButton;
+    private Texture helpButton;
     private Texture scoreButton;
     private Texture quitButton;
 
@@ -29,11 +37,14 @@ public class MenuScreen extends Screens{
 
         // Textures are initialized
         background = new Texture("background2.png");
-        title = new Texture("Title.png");
-        playButton = new Texture("PlayButton.png");
-//        tutorialButton = new Texture("tutorialButton.png");
-        scoreButton = new Texture("ScoreButton.png");
-        quitButton = new Texture("QuitButton.png");
+//        title = new Texture("Title.png");
+
+        title = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Title.gif").read());
+
+        startButton = new Texture("Start Button.png");
+        helpButton = new Texture("Help Button.png");
+        scoreButton = new Texture("Scores Button.png");
+        quitButton = new Texture("Quit Button.png");
 
         // Menu song is initialized
         menuTheme = Gdx.audio.newMusic(Gdx.files.internal("menuTheme.mp3"));
@@ -58,10 +69,10 @@ public class MenuScreen extends Screens{
             camera.unproject(touchPos);
 
             // Bounds for where each button is
-            Rectangle playButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - playButton.getWidth() / 2, 200, playButton.getWidth(), playButton.getHeight());
-//            Rectangle tutorialButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - tutorialButton.getWidth() / 2, 200, tutorialButton.getWidth(), tutorialButton.getHeight());
-            Rectangle scoreButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - scoreButton.getWidth() / 2, 150, scoreButton.getWidth(), scoreButton.getHeight());
-            Rectangle quitButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - quitButton.getWidth() / 2, 100, quitButton.getWidth(), quitButton.getHeight());
+            Rectangle playButtonBounds = new Rectangle(300 - (startButton.getWidth() / 2), 130, startButton.getWidth(), startButton.getHeight());
+            Rectangle helpButtonBounds = new Rectangle(300 - (helpButton.getWidth() / 2), 30, helpButton.getWidth(), helpButton.getHeight());
+            Rectangle scoreButtonBounds = new Rectangle(500 - (scoreButton.getWidth() / 2), 130, scoreButton.getWidth(), scoreButton.getHeight());
+            Rectangle quitButtonBounds = new Rectangle(500 - (quitButton.getWidth() / 2), 30, quitButton.getWidth(), quitButton.getHeight());
 
             // Screens will change is user's touch is in specific bounds
             if (playButtonBounds.contains(touchPos.x, touchPos.y)) {
@@ -74,7 +85,7 @@ public class MenuScreen extends Screens{
 //            }
 
             if(scoreButtonBounds.contains(touchPos.x, touchPos.y)) {
-                sm.setScreen(new ScoreScreen(sm));
+                sm.pushScreen(new ScoreScreen(sm));
             }
 
             if(quitButtonBounds.contains(touchPos.x, touchPos.y)) {
@@ -95,16 +106,22 @@ public class MenuScreen extends Screens{
     @Override
     public void render(SpriteBatch sb) {
 
+        elapsed += Gdx.graphics.getDeltaTime();
+
         sb.setProjectionMatrix(camera.combined);
 
         // Render menu textures
         sb.begin();
 
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-        sb.draw(title, (AstroBlaster.WIDTH / 2) - (title.getWidth() / 2), 380);
-        sb.draw(playButton, (AstroBlaster.WIDTH / 2) - (playButton.getWidth() / 2), 200);
-        sb.draw(scoreButton, (AstroBlaster.WIDTH / 2) - (scoreButton.getWidth() / 2), 150);
-        sb.draw(quitButton, (AstroBlaster.WIDTH / 2) - (quitButton.getWidth() / 2), 100);
+//        sb.draw(title, (AstroBlaster.WIDTH / 2) - (title.getWidth() / 2), 380);
+
+        sb.draw(title.getKeyFrame(elapsed), (AstroBlaster.WIDTH/2) - 195, 230);
+
+        sb.draw(startButton, 280 - (startButton.getWidth() / 2), 130);
+        sb.draw(scoreButton, 520 - (scoreButton.getWidth() / 2), 130);
+        sb.draw(helpButton, 280 - (helpButton.getWidth() / 2), 30);
+        sb.draw(quitButton, 520 - (quitButton.getWidth() / 2), 30);
 
         sb.end();
 
@@ -117,11 +134,12 @@ public class MenuScreen extends Screens{
 
         // Dispose all textures
         background.dispose();
-        title.dispose();
-        playButton.dispose();
+//        title.dispose();
+        startButton.dispose();
         scoreButton.dispose();
         quitButton.dispose();
         menuTheme.dispose();
+
 
     }
 }

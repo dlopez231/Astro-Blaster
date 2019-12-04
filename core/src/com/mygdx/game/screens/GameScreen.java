@@ -82,7 +82,7 @@ public class GameScreen extends Screens{
         pauseBG = new Texture("transparentBG.png");
         resumeButton = new Texture("resume.png");
         homeButton = new Texture("home.png");
-        quitButton = new Texture("QuitButton.png");
+        quitButton = new Texture("Quit Button.png");
 
         // Health of the ship
         currentHealth = 3;
@@ -202,7 +202,7 @@ public class GameScreen extends Screens{
                 // Get spawn time
                 spawnTime += 1*Gdx.graphics.getDeltaTime();
 
-                // Spawn enemy when 1 sec has passed and and enemy array is
+                // Spawn enemy when 1 sec has passed and while enemy array is
                 // lower than or equal to 10
                 while(spawnTime >= 1f && getEnemies().size <= 10) {
 
