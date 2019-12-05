@@ -28,6 +28,7 @@ public class GameScreen extends Screens{
     private Texture background;
     private Texture pauseButton;
     private Texture pauseBG;
+    private Texture pauseString;
     private Texture resumeButton;
     private Texture homeButton;
     private Texture quitButton;
@@ -62,6 +63,8 @@ public class GameScreen extends Screens{
 
     // Float for adding delay before screen changes to game over
     private float elapsed;
+    private float elapsed2;
+    private float elapsed3;
 
     // Float for slowin down enemies spawning
     private float spawnTime;
@@ -89,6 +92,7 @@ public class GameScreen extends Screens{
         background = new Texture("background2.png");
         pauseButton = new Texture("pause.png");
         pauseBG = new Texture("transparentBG.png");
+        pauseString = new Texture("pausedTitle.png");
         resumeButton = new Texture("resume.png");
         homeButton = new Texture("home.png");
         quitButton = new Texture("Quit Button.png");
@@ -142,24 +146,6 @@ public class GameScreen extends Screens{
             }
 
             // Move ship if touch position is in left side of screen
-//            if(shipTouchBounds.contains(touchPos.x, touchPos.y)) {
-//
-//                // Ship will go up if touch position is above ship texture position
-//                if (touchPos.y > (ship.getPosition().y + ship.getTexture().getHeight() / 2)) {
-//
-//                    ship.setDirection(0, touchPos.y - (ship.getPosition().y + (ship.getTexture().getHeight() / 2)));
-//                    // Ship will fire at the same time
-//                    fire();
-//
-//                }
-//
-//                // Ship will go down is touch position is below ship texture position
-//                else {
-//                    ship.setDirection(0, -((ship.getPosition().y + (ship.getTexture().getHeight() / 2)) - touchPos.y));
-//                    fire();
-//                }
-//            }
-
             if(shipTouchBounds.contains(touchPos.x, touchPos.y)) {
 
                 // Ship will go up if touch position is above ship texture position
@@ -182,9 +168,9 @@ public class GameScreen extends Screens{
             // If the state is paused, set up pause menu button bounds
             if(this.state == State.PAUSE){
 
-                Rectangle resumeButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), 200, resumeButton.getWidth(), resumeButton.getHeight());
+                Rectangle resumeButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), 240, resumeButton.getWidth(), resumeButton.getHeight());
                 Rectangle homeButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150, homeButton.getWidth(), homeButton.getHeight());
-                Rectangle quitButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 100, quitButton.getWidth(), quitButton.getHeight());
+                Rectangle quitButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 60, quitButton.getWidth(), quitButton.getHeight());
 
                 // Game will either resume, go back to menu, or quit
                 if(resumeButtonBounds.contains(touchPos.x, touchPos.y)){
@@ -200,11 +186,6 @@ public class GameScreen extends Screens{
                     Gdx.app.exit();
                 }
 
-            }
-
-            // Stop moving ship is touch position is in right side
-            if(!Gdx.input.isTouched()){
-                ship.setDirection(0,0);
             }
         }
     }
@@ -261,8 +242,17 @@ public class GameScreen extends Screens{
 
                         // Remove enemy if it has 0 health and play death sound
                         if(e.getHealth() <= 0) {
-                            enemies.removeValue(e, false);
                             enemyDies.play(0.04f);
+
+//                            elapsed2 += 1*Gdx.graphics.getDeltaTime();
+//
+//                            if(elapsed2 >= 1f) {
+
+                                enemies.removeValue(e, false);
+
+//                                elapsed2 -= 1f;
+//
+//                            }
                         }
                     }
                 }
@@ -272,7 +262,7 @@ public class GameScreen extends Screens{
 
                     // Wait for 2 seconds before screen changes to game over
                     elapsed += delta;
-                    if(elapsed > 2.0) {
+                    if(elapsed >= 2.0) {
 
                         // Change to game over screen
                         sm.setScreen(new GameOverScreen(sm, currentScore));
@@ -309,8 +299,19 @@ public class GameScreen extends Screens{
                             // Remove ship from array and play death sound when
                             // it has 0 health
                             if(e.getHealth() <= 0) {
-                                enemies.removeValue(e, false);
+
                                 enemyDies.play(0.04f);
+
+//                                elapsed3 += 1*Gdx.graphics.getDeltaTime();
+//
+//                                if(elapsed3 >= 1f) {
+
+                                    enemies.removeValue(e, false);
+
+//                                    elapsed3 -= 1f;
+//
+//
+//                                }
 
                                 // Add 300 to score when enemy is killed with
                                 // bullets
@@ -342,7 +343,7 @@ public class GameScreen extends Screens{
         sb.draw(background, 0, 0, bgX, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
         for(Enemy e : enemies) {
-            sb.draw(e.getTexture(), e.getPosition().x, e.getPosition().y);
+            e.render(sb);
         }
 
 //        sb.draw(ship.getTexture(), ship.getPosition().x, ship.getPosition().y);
@@ -365,9 +366,10 @@ public class GameScreen extends Screens{
         if(this.state == state.PAUSE){
 
             sb.draw(pauseBG, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-            sb.draw(resumeButton, (AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), 200);
+            sb.draw(pauseString, (AstroBlaster.WIDTH/2) - (pauseString.getWidth()/2), 320);
+            sb.draw(resumeButton, (AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), 240);
             sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150);
-            sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 100);
+            sb.draw(quitButton, 100, 5);
 
         }
         sb.end();
@@ -432,6 +434,7 @@ public class GameScreen extends Screens{
 
         }
         pauseBG.dispose();
+        pauseString.dispose();
         resumeButton.dispose();
         homeButton.dispose();
         quitButton.dispose();
