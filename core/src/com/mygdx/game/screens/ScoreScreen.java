@@ -16,6 +16,7 @@ public class ScoreScreen extends Screens {
 
     // Textures for scoreboard screen
     private Texture background;
+    private Texture scoreTitle;
     private String score_1;
     private String score_2;
     private String score_3;
@@ -30,14 +31,15 @@ public class ScoreScreen extends Screens {
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
         background = new Texture("background2.png");
+        scoreTitle = new Texture("Scores Title.png");
         homeButton = new Texture("home.png");
 
         // Get high scores and store them in string
-        score_1 = "Score 1: " + myPrefs.getInteger("score_1");
-        score_2 = "Score 2: " + myPrefs.getInteger("score_2");
-        score_3 = "Score 3: " + myPrefs.getInteger("score_3");
-        score_4 = "Score 4: " + myPrefs.getInteger("score_4");
-        score_5 = "Score 5: " + myPrefs.getInteger("score_5");
+        score_1 = "1:   " + myPrefs.getInteger("score_1");
+        score_2 = "2:   " + myPrefs.getInteger("score_2");
+        score_3 = "3:   " + myPrefs.getInteger("score_3");
+        score_4 = "4:   " + myPrefs.getInteger("score_4");
+        score_5 = "5:   " + myPrefs.getInteger("score_5");
 
         // Custom font
         scoreFont = new BitmapFont(Gdx.files.internal("myFont.fnt"), Gdx.files.internal("myFont.png"), false);
@@ -82,12 +84,13 @@ public class ScoreScreen extends Screens {
         // Draw scores
         sb.begin();
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
+        sb.draw(scoreTitle, AstroBlaster.WIDTH/2 - scoreTitle.getWidth()/2, 400);
 
-        scoreFont.draw(sb, score_1, 20, 300);
-        scoreFont.draw(sb, score_2, 20, 250);
-        scoreFont.draw(sb, score_3, 20, 200);
-        scoreFont.draw(sb, score_4, 20, 150);
-        scoreFont.draw(sb, score_5, 20, 100);
+        scoreFont.draw(sb, score_1, 330, 320);
+        scoreFont.draw(sb, score_2, 330, 270);
+        scoreFont.draw(sb, score_3, 330, 220);
+        scoreFont.draw(sb, score_4, 330, 170);
+        scoreFont.draw(sb, score_5, 330, 120);
 
         sb.draw(homeButton, 740, 20);
 
@@ -96,9 +99,10 @@ public class ScoreScreen extends Screens {
     }
 
     @Override
-    public void dispose() {
+    public void dispose(){
 
         background.dispose();
+        scoreFont.dispose();
 
 
     }

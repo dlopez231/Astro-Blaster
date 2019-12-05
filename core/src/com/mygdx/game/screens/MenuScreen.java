@@ -3,13 +3,16 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AstroBlaster;
 import com.mygdx.game.sprites.GifDecoder;
+
 
 public class MenuScreen extends Screens{
 
@@ -135,7 +138,16 @@ public class MenuScreen extends Screens{
         // Dispose all textures
         background.dispose();
 //        title.dispose();
+
+        Object[] titleFrames = title.getKeyFrames();
+
+        for(int i = 0; i < titleFrames.length; i++){
+            Texture tmp = ((TextureRegion) titleFrames[i]).getTexture();
+            tmp.dispose();
+        }
+
         startButton.dispose();
+        helpButton.dispose();
         scoreButton.dispose();
         quitButton.dispose();
         menuTheme.dispose();

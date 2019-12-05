@@ -60,6 +60,7 @@ public class Enemy {
 
     }
 
+
     public Texture getTexture(){
         return enemy;
     }
@@ -93,5 +94,7 @@ public class Enemy {
         return health;
 
     }
+
+
 
 }
