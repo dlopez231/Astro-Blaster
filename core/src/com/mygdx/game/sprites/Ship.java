@@ -17,32 +17,29 @@ public class Ship{
 
     private int health;
 
-    private Animation<TextureRegion> ship;
+    private Animation<TextureRegion> animation;
 
-    private Animation<TextureRegion> shipDies;
+    private Animation<TextureRegion> deathAnimation;
 
     private float elapsed;
 
-    private Rectangle ship_hitbox;
+    private Rectangle hitbox;
 
     public Ship(int x, int y){
 
         position = new Vector2(x, y);
         direction = new Vector2(0, 0);
-//        ship = new Texture("playership.png");
 
-        ship = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("shipTest.gif").read());
-        shipDies = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("shipTest2.gif").read());
+        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("ship.gif").read());
+        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("shipTest2.gif").read());
 
-//        ship_hitbox = new Rectangle(x, y, ship.getWidth(), ship.getHeight());
-
-        ship_hitbox = new Rectangle(x, y, 75, 61);
+        hitbox = new Rectangle(x, y, 122, 70);
 
         health = 3;
 
     }
 
-    public void update(float delta){
+    public void update(){
 
         // Move ship based on direction
         position.add(0, direction.y);
@@ -57,7 +54,7 @@ public class Ship{
         }
 
         // Update ship bounds along with ship texture position
-        ship_hitbox.setPosition(position.x, position.y);
+        hitbox.setPosition(position.x, position.y);
 
     }
 
@@ -66,12 +63,11 @@ public class Ship{
         elapsed += Gdx.graphics.getDeltaTime();
 
         if(health > 0){
-            sb.draw(ship.getKeyFrame(elapsed), position.x, position.y);
+            sb.draw(animation.getKeyFrame(elapsed), position.x, position.y);
         }
         else{
-            sb.draw(shipDies.getKeyFrame(elapsed), position.x, position.y);
+            sb.draw(deathAnimation.getKeyFrame(elapsed), position.x, position.y);
         }
-
     }
 
 
@@ -82,13 +78,13 @@ public class Ship{
     public void setDirection(float x, float y){
 
         // Ship direction is slowed down
-        direction.set(0, y/20);
+        direction.set(0, y/10);
 
     }
 
 
     public Rectangle getBounds(){
-        return ship_hitbox;
+        return hitbox;
 
     }
 
@@ -105,7 +101,7 @@ public class Ship{
 
     public void dispose(){
 
-        Object[] shipFrames = ship.getKeyFrames();
+        Object[] shipFrames = animation.getKeyFrames();
 
         for(int i = 0; i < shipFrames.length; i++){
             Texture tmp = ((TextureRegion) shipFrames[i]).getTexture();
@@ -113,16 +109,12 @@ public class Ship{
 
         }
 
-        Object[] shipDiesFrames = shipDies.getKeyFrames();
+        Object[] shipDiesFrames = deathAnimation.getKeyFrames();
 
         for(int i = 0; i < shipDiesFrames.length; i++){
             Texture tmp = ((TextureRegion) shipDiesFrames[i]).getTexture();
             tmp.dispose();
 
         }
-
     }
-
-
-
 }

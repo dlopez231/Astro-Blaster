@@ -1,6 +1,7 @@
 package com.mygdx.game.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mygdx.game.AstroBlaster;
@@ -11,33 +12,37 @@ public class Bullet {
 
     private Vector2 direction;
 
-    private Texture bullet;
+    private Texture texture;
 
-    private Rectangle bullet_hitbox;
-
+    private Rectangle hitbox;
 
     public Bullet(float x, float y){
 
         position = new Vector2(x, y);
 
         // Speed of bullet
-        direction = new Vector2(+7, 0);
+        direction = new Vector2(+10, 0);
 
-        bullet = new Texture("bullet.png");
+        texture = new Texture("bullet.png");
 
-        bullet_hitbox = new Rectangle(position.x, position.y, bullet.getWidth(), bullet.getHeight());
+        hitbox = new Rectangle(position.x, position.y, texture.getWidth(), texture.getHeight());
 
     }
 
     public void update(){
         position.add(direction);
 
-        bullet_hitbox.setPosition(position.x, position.y);
+        hitbox.setPosition(position.x, position.y);
 
     }
 
+    public void render(SpriteBatch sb){
+
+        sb.draw(texture, position.x, position.y);
+    }
+
     public Texture getTexture(){
-        return bullet;
+        return texture;
 
     }
 
@@ -46,7 +51,9 @@ public class Bullet {
     }
 
     public boolean collides(Rectangle enemies){
-        return enemies.overlaps(bullet_hitbox);
+
+
+        return enemies.overlaps(hitbox);
     }
 
     public boolean checkEnd(){
@@ -55,12 +62,9 @@ public class Bullet {
     }
 
     public void dispose(){
-        bullet.dispose();
+        texture.dispose();
     }
 
-    public Rectangle getBounds(){
-        return bullet_hitbox;
-    }
 
 
 

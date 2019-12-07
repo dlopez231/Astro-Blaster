@@ -1,7 +1,6 @@
 package com.mygdx.game.screens;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.Stack;
 
 // Screen helper
@@ -39,10 +38,6 @@ public class ScreenManager {
     public void render(SpriteBatch sb){
         screens.peek().render(sb);
 
-    }
-
-    public void getCurrentScreen(){
-        screens.peek();
     }
 
 }

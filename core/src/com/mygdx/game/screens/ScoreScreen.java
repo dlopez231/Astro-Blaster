@@ -3,14 +3,9 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.AstroBlaster;
-
-import sun.awt.image.GifImageDecoder;
 
 public class ScoreScreen extends Screens {
 
@@ -54,13 +49,13 @@ public class ScoreScreen extends Screens {
 
         if(Gdx.input.justTouched()){
 
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            input.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
-            camera.unproject(touchPos);
+            camera.unproject(input);
 
             Rectangle homeButtonBounds = new Rectangle(740, 20, homeButton.getWidth(), homeButton.getHeight());
 
-            if(homeButtonBounds.contains(touchPos.x, touchPos.y)){
+            if(homeButtonBounds.contains(input.x, input.y)){
                 sm.popScreen();
             }
 
@@ -102,7 +97,9 @@ public class ScoreScreen extends Screens {
     public void dispose(){
 
         background.dispose();
+        scoreTitle.dispose();
         scoreFont.dispose();
+        homeButton.dispose();
 
 
     }

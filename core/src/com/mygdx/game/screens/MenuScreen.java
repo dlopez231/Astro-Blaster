@@ -3,13 +3,10 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.TextureArray;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.AstroBlaster;
 import com.mygdx.game.sprites.GifDecoder;
 
@@ -17,7 +14,6 @@ import com.mygdx.game.sprites.GifDecoder;
 public class MenuScreen extends Screens{
 
     // Textures for the menu screen
-//    private Texture title;
 
     private Animation<TextureRegion> title;
     private float elapsed;
@@ -40,7 +36,6 @@ public class MenuScreen extends Screens{
 
         // Textures are initialized
         background = new Texture("background2.png");
-//        title = new Texture("Title.png");
 
         title = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("Title.gif").read());
 
@@ -66,10 +61,10 @@ public class MenuScreen extends Screens{
         if (Gdx.input.justTouched()) {
 
             // Touch positions
-            Vector3 touchPos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            input.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
             // For accurate touch
-            camera.unproject(touchPos);
+            camera.unproject(input);
 
             // Bounds for where each button is
             Rectangle playButtonBounds = new Rectangle(300 - (startButton.getWidth() / 2), 130, startButton.getWidth(), startButton.getHeight());
@@ -78,20 +73,19 @@ public class MenuScreen extends Screens{
             Rectangle quitButtonBounds = new Rectangle(500 - (quitButton.getWidth() / 2), 30, quitButton.getWidth(), quitButton.getHeight());
 
             // Screens will change is user's touch is in specific bounds
-            if (playButtonBounds.contains(touchPos.x, touchPos.y)) {
+            if (playButtonBounds.contains(input.x, input.y)) {
                 sm.setScreen(new GameScreen(sm));
             }
 
-//            if(tutorialButtonBounds.contains(touchPos.x, touchPos.y)) {
-//                System.out.println("Tutorial is touched");
-//                sm.setScreen(new TutorialScreen(sm));
-//            }
+            if(helpButtonBounds.contains(input.x, input.y)) {
+                sm.pushScreen(new HelpScreen(sm));
+            }
 
-            if(scoreButtonBounds.contains(touchPos.x, touchPos.y)) {
+            if(scoreButtonBounds.contains(input.x, input.y)) {
                 sm.pushScreen(new ScoreScreen(sm));
             }
 
-            if(quitButtonBounds.contains(touchPos.x, touchPos.y)) {
+            if(quitButtonBounds.contains(input.x, input.y)) {
                 dispose();
                 Gdx.app.exit();
             }
@@ -117,7 +111,6 @@ public class MenuScreen extends Screens{
         sb.begin();
 
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-//        sb.draw(title, (AstroBlaster.WIDTH / 2) - (title.getWidth() / 2), 380);
 
         sb.draw(title.getKeyFrame(elapsed), (AstroBlaster.WIDTH/2) - 195, 230);
 
@@ -137,7 +130,6 @@ public class MenuScreen extends Screens{
 
         // Dispose all textures
         background.dispose();
-//        title.dispose();
 
         Object[] titleFrames = title.getKeyFrames();
 

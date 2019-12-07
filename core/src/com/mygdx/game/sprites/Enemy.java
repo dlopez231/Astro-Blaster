@@ -8,42 +8,46 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool;
 import com.mygdx.game.AstroBlaster;
 
 
-public class Enemy {
+public class Enemy implements Pool.Poolable {
 
     private Vector2 position;
 
     private Vector2 direction;
 
-//    private Texture enemy;
-
-    private Rectangle enemyHitbox;
+    private Rectangle hitbox;
 
     private int health;
 
-    private Animation<TextureRegion> enemy;
+    private Animation<TextureRegion> animation;
 
-    private Animation<TextureRegion>enemyDies;
+    private Animation<TextureRegion> deathAnimation;
 
     private float elapsed;
 
-    public Enemy(){
-//        enemy = new Texture("enemy.png");
+    private float x;
+    private float y;
+    private float speed;
 
-        enemy = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest.gif").read());
-        enemyDies = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest2.gif").read());
+
+    public Enemy(){
+//    public void init(){
+
+        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest.gif").read());
+        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest2.gif").read());
 
         // Random enemy spawn coordinates
         // Enemies spawn in edge of screen times 1/3rd of screen width size
-        float x = MathUtils.random(AstroBlaster.WIDTH + 75, AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
+        x = MathUtils.random(AstroBlaster.WIDTH + 75, AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
 
-        // Enemies spawn in randomm height of screen
-        float y = MathUtils.random(0, AstroBlaster.HEIGHT - 75);
+        // Enemies spawn in random height of screen
+        y = MathUtils.random(0, AstroBlaster.HEIGHT - 75);
 
         // Random speed of enemy
-        float speed = MathUtils.random(3, 6);
+        speed = MathUtils.random(3, 6);
 
         // Set up position
         position = new Vector2(x, y);
@@ -52,9 +56,25 @@ public class Enemy {
         direction = new Vector2(-speed, 0);
 
         // Update bounds along with enemy texture coordinates
-        enemyHitbox = new Rectangle(position.x, position.y, 75, 75);
+        hitbox = new Rectangle(position.x, position.y, 75, 75);
 
         // Enemies have 3 health
+        health = 3;
+
+    }
+
+    public void re_init(){
+
+        x = MathUtils.random(AstroBlaster.WIDTH + 75, AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
+
+        y = MathUtils.random(0, AstroBlaster.HEIGHT - 75);
+
+        speed = MathUtils.random(3, 6);
+
+        position.set(x, y);
+
+        direction.set(-speed, 0);
+
         health = 3;
 
     }
@@ -69,62 +89,54 @@ public class Enemy {
             position.set(AstroBlaster.WIDTH, y);
         }
 
-        enemyHitbox.setPosition(position.x, position.y);
-
+        if(health > 0) {
+            hitbox.setPosition(position.x, position.y);
+        }
     }
-
-
-//    public Texture getTexture(){
-//        return enemy;
-//    }
 
     public void render(SpriteBatch sb){
 
         elapsed += Gdx.graphics.getDeltaTime();
 
         if(health > 0){
-            sb.draw(enemy.getKeyFrame(elapsed), position.x, position.y);
+            sb.draw(animation.getKeyFrame(elapsed), position.x, position.y);
         }
 
         else{
-            sb.draw(enemyDies.getKeyFrame(elapsed), position.x, position.y);
+            sb.draw(deathAnimation.getKeyFrame(elapsed), position.x, position.y);
             direction.x = 0;
 
         }
-
-    }
-
-    public Vector2 getPosition(){
-        return position;
-
     }
 
     public boolean collides(Rectangle ship){
-        return ship.overlaps(enemyHitbox);
+
+
+        return ship.overlaps(hitbox);
 
     }
 
     public Rectangle getBounds(){
-        return enemyHitbox;
+        return hitbox;
     }
+
 
     public void dispose(){
 
-        Object[] enemyFrames = enemy.getKeyFrames();
+        Object[] enemyFrames = animation.getKeyFrames();
 
         for(int i = 0; i < enemyFrames.length; i++){
             Texture tmp = ((TextureRegion) enemyFrames[i]).getTexture();
             tmp.dispose();
         }
 
-        Object[] enemyFrames2 = enemyDies.getKeyFrames();
+        Object[] enemyFrames2 = deathAnimation.getKeyFrames();
 
         for(int i = 0; i < enemyFrames2.length; i++){
             Texture tmp = ((TextureRegion) enemyFrames2[i]).getTexture();
             tmp.dispose();
 
         }
-
     }
 
     public void subtractHP(int hp){
@@ -138,5 +150,12 @@ public class Enemy {
     }
 
 
+    @Override
+    public void reset() {
 
+        //Put unused enemy sprites out of screen
+        position.set(AstroBlaster.WIDTH + 75, 0);
+        direction.set(0,0);
+
+    }
 }

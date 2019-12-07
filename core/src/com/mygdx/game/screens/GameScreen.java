@@ -7,15 +7,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
 import com.mygdx.game.AstroBlaster;
 import com.mygdx.game.sprites.Bullet;
 import com.mygdx.game.sprites.Enemy;
+import com.mygdx.game.sprites.EnemyPool;
 import com.mygdx.game.sprites.Ship;
-
-import java.util.ArrayList;
 
 public class GameScreen extends Screens{
 
@@ -35,7 +32,6 @@ public class GameScreen extends Screens{
 
     // For displaying ship health
     private String shipHealth;
-//    private int currentHealth;
     private BitmapFont healthBM;
 
     // For displaying score
@@ -48,6 +44,7 @@ public class GameScreen extends Screens{
 
     // Enemies are stored in an array
     private Array<Enemy> enemies;
+    private EnemyPool ep;
 
     // Bullets are stored in an array
     private Array<Bullet> bullets;
@@ -62,11 +59,11 @@ public class GameScreen extends Screens{
     private int bgX = 0;
 
     // Float for adding delay before screen changes to game over
+    private float shipDeathDelay;
+    private float enemyDeathDelay;
     private float elapsed;
-    private float elapsed2;
-    private float elapsed3;
 
-    // Float for slowin down enemies spawning
+    // Float for slowing down enemies spawning
     private float spawnTime;
 
     // Enum for state of the game
@@ -97,8 +94,6 @@ public class GameScreen extends Screens{
         homeButton = new Texture("home.png");
         quitButton = new Texture("Quit Button.png");
 
-
-
         // Player score
         currentScore = 0;
         score = "Score: " + currentScore;
@@ -112,6 +107,13 @@ public class GameScreen extends Screens{
 
         // Initialize arrays
         enemies = new Array<Enemy>();
+
+        ep = new EnemyPool(10, 11);
+
+        System.out.println(ep.getFree());
+
+        System.out.println(ep.getFree());
+
         bullets = new Array<Bullet>();
 
         // Initialize sounds
@@ -129,10 +131,9 @@ public class GameScreen extends Screens{
         if(Gdx.input.isTouched()){
 
             // Touch positions
-            Vector3 touchPos = new Vector3();
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+            input.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 
-            camera.unproject(touchPos);
+            camera.unproject(input);
 
             // Set up bounds for pause button
             Rectangle pauseButtonBounds = new Rectangle(AstroBlaster.WIDTH - pauseButton.getWidth() - 10,10, pauseButton.getWidth(), pauseButton.getHeight());
@@ -141,17 +142,17 @@ public class GameScreen extends Screens{
             Rectangle shipTouchBounds = new Rectangle(0, 0, AstroBlaster.WIDTH/2, AstroBlaster.HEIGHT);
 
             // Pause if pause button is touched
-            if(pauseButtonBounds.contains(touchPos.x, touchPos.y)){
+            if(pauseButtonBounds.contains(input.x, input.y)){
                 pause();
             }
 
             // Move ship if touch position is in left side of screen
-            if(shipTouchBounds.contains(touchPos.x, touchPos.y)) {
+            if(shipTouchBounds.contains(input.x, input.y)) {
 
                 // Ship will go up if touch position is above ship texture position
-                if (touchPos.y > (ship.getPosition().y + 61 / 2)) {
+                if (input.y > (ship.getPosition().y + 61 / 2)) {
 
-                    ship.setDirection(0, touchPos.y - (ship.getPosition().y + (61 / 2)));
+                    ship.setDirection(0, input.y - (ship.getPosition().y + (61 / 2)));
                     // Ship will fire at the same time
                     fire();
 
@@ -159,7 +160,7 @@ public class GameScreen extends Screens{
 
                 // Ship will go down is touch position is below ship texture position
                 else {
-                    ship.setDirection(0, -((ship.getPosition().y + (61 / 2)) - touchPos.y));
+                    ship.setDirection(0, -((ship.getPosition().y + (61 / 2)) - input.y));
                     fire();
                 }
             }
@@ -173,15 +174,15 @@ public class GameScreen extends Screens{
                 Rectangle quitButtonBounds = new Rectangle((AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 60, quitButton.getWidth(), quitButton.getHeight());
 
                 // Game will either resume, go back to menu, or quit
-                if(resumeButtonBounds.contains(touchPos.x, touchPos.y)){
+                if(resumeButtonBounds.contains(input.x, input.y)){
                     resume();
                 }
 
-                if(homeButtonBounds.contains(touchPos.x, touchPos.y)){
+                if(homeButtonBounds.contains(input.x, input.y)){
                     sm.setScreen(new MenuScreen(sm));
                 }
 
-                if(quitButtonBounds.contains(touchPos.x, touchPos.y)){
+                if(quitButtonBounds.contains(input.x, input.y)){
                     dispose();
                     Gdx.app.exit();
                 }
@@ -193,6 +194,8 @@ public class GameScreen extends Screens{
 
     @Override
     public void update(float delta) {
+
+        camera.update();
 
         // Keep handling input
         handleInput();
@@ -208,19 +211,19 @@ public class GameScreen extends Screens{
                 // Speed of background loop
                 bgX += 1;
 
-                // Get spawn time
-                spawnTime += 1*Gdx.graphics.getDeltaTime();
+                elapsed += 1*Gdx.graphics.getDeltaTime();
 
-                // Spawn enemy when 1 sec has passed and while enemy array is
-                // lower than or equal to 10
-                while(spawnTime >= 1f && getEnemies().size <= 10) {
+                while(elapsed >= 5f){
 
-                    // Add enemies to array
-                    enemies.add(new Enemy());
+                    currentScore += 10;
 
-                    // Reset spawn time
-                    spawnTime -= 1f;
+                    score = "Score: " + currentScore;
+
+                    elapsed -= 5f;
+
                 }
+
+                spawnEnemy();
 
                 // Update each enemy
                 for(Enemy e : enemies) {
@@ -228,10 +231,10 @@ public class GameScreen extends Screens{
 
                     // Subtract health for ship when it still has more than 0
                     // health and collides with enemy bounds
-                    if(ship.getHealth() > 0 && e.collides(ship.getBounds())){
+                    if(e.getHealth() > 0 && ship.getHealth() > 0 && e.collides(ship.getBounds())) {
                         ship.subtractHP();
                         shipHealth = "Ship Health: " + ship.getHealth();
-                        if(ship.getHealth() <= 0) {
+                        if (ship.getHealth() <= 0) {
 
                             shipDies.play(0.2f);
 //                            battleTheme.dispose();
@@ -240,19 +243,22 @@ public class GameScreen extends Screens{
                         // Enemy just dies
                         e.subtractHP(3);
 
+                        enemyDies.play(0.04f);
+
+                    }
+
                         // Remove enemy if it has 0 health and play death sound
-                        if(e.getHealth() <= 0) {
-                            enemyDies.play(0.04f);
+                    if(e.getHealth() <= 0) {
 
-//                            elapsed2 += 1*Gdx.graphics.getDeltaTime();
-//
-//                            if(elapsed2 >= 1f) {
+                        enemyDeathDelay += 1*Gdx.graphics.getDeltaTime();
 
-                                enemies.removeValue(e, false);
+                        if(enemyDeathDelay >= 1f) {
 
-//                                elapsed2 -= 1f;
-//
-//                            }
+                            ep.free(e);
+                            enemies.removeValue(e, false);
+
+                            enemyDeathDelay -= 1f;
+
                         }
                     }
                 }
@@ -261,13 +267,16 @@ public class GameScreen extends Screens{
                 if(ship.getHealth() <= 0){
 
                     // Wait for 2 seconds before screen changes to game over
-                    elapsed += delta;
-                    if(elapsed >= 2.0) {
+                    shipDeathDelay += delta;
+                    if(shipDeathDelay >= 2.0) {
 
                         // Change to game over screen
                         sm.setScreen(new GameOverScreen(sm, currentScore));
                     }
                 }
+
+                // Update ship
+                ship.update();
 
                 // Update each bullet in array
                 for(Bullet b : bullets){
@@ -285,45 +294,26 @@ public class GameScreen extends Screens{
 
                         // Subtract 1 health from each enemy if it collides with
                         // bullet bounds
-                        if(b.collides(e.getBounds())){
+                        if(e.getHealth() > 0 && b.collides(e.getBounds())) {
 
                             e.subtractHP(1);
 
-                            if(e.getHealth() > 0) {
-                                enemyHit.play(0.03f);
-                            }
+                            enemyHit.play(0.03f);
 
-                            // Remove bullet from array
-                            bullets.removeValue(b, false);
-
-                            // Remove ship from array and play death sound when
-                            // it has 0 health
                             if(e.getHealth() <= 0) {
 
                                 enemyDies.play(0.04f);
 
-//                                elapsed3 += 1*Gdx.graphics.getDeltaTime();
-//
-//                                if(elapsed3 >= 1f) {
-
-                                    enemies.removeValue(e, false);
-
-//                                    elapsed3 -= 1f;
-//
-//
-//                                }
-
-                                // Add 300 to score when enemy is killed with
-                                // bullets
                                 currentScore += 300;
                                 score = "Score: " + currentScore;
                             }
+
+                            // Remove bullet from array
+                            bullets.removeValue(b, false);
                         }
                     }
                 }
 
-                // Update ship
-                ship.update(delta);
                 break;
 
             case PAUSE:
@@ -346,8 +336,6 @@ public class GameScreen extends Screens{
             e.render(sb);
         }
 
-//        sb.draw(ship.getTexture(), ship.getPosition().x, ship.getPosition().y);
-
         ship.render(sb);
 
         for(Bullet b : bullets) {
@@ -369,7 +357,7 @@ public class GameScreen extends Screens{
             sb.draw(pauseString, (AstroBlaster.WIDTH/2) - (pauseString.getWidth()/2), 320);
             sb.draw(resumeButton, (AstroBlaster.WIDTH/2) - (resumeButton.getWidth()/2), 240);
             sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150);
-            sb.draw(quitButton, 100, 5);
+            sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 60);
 
         }
         sb.end();
@@ -394,12 +382,35 @@ public class GameScreen extends Screens{
     public void fire(){
 
         // Slow down adding bullets and play sound
-        if(System.currentTimeMillis() - lastFire >= 300 && ship.getHealth() > 0){
-            bullets.add(new Bullet(ship.getPosition().x + 75, ship.getPosition().y + 61/2));
+        if(System.currentTimeMillis() - lastFire >= 250 && ship.getHealth() > 0){
+            bullets.add(new Bullet(ship.getPosition().x + 121, ship.getPosition().y + 9));
             laser.play(0.1f);
             lastFire = System.currentTimeMillis();
 
         }
+    }
+
+    public void spawnEnemy(){
+
+        // Get spawn time
+        spawnTime += 1*Gdx.graphics.getDeltaTime();
+
+        // Spawn enemy when 1 sec has passed and while enemy array is
+        // lower than or equal to 10
+
+        while(spawnTime >= 1f && getEnemies().size <= 10) {
+
+            // Add enemies to array
+            Enemy e = ep.obtain();
+
+            e.re_init();
+
+            enemies.add(e);
+
+            // Reset spawn time
+            spawnTime -= 1f;
+        }
+
     }
 
     // Pause function for PAUSE state

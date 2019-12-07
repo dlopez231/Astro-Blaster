@@ -24,7 +24,7 @@ INJECTED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\Andro
 application
 ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:5:5-22:19
 	android:label
-		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:10:9-41
+		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:10:9-38
 	android:appCategory
 		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:9:9-35
 	android:icon
