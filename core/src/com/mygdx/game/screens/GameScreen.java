@@ -19,6 +19,7 @@ public class GameScreen extends Screens{
     // Variable to help with slowing down ship bullets
     private long lastFire;
 
+    // Music to play throughout the game
     private Music battleTheme;
 
     // Game screen textures
@@ -76,17 +77,19 @@ public class GameScreen extends Screens{
     State state = State.RUN;
 
     public GameScreen(ScreenManager sm) {
+
         super(sm);
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
+        // Set up music
         battleTheme = Gdx.audio.newMusic(Gdx.files.internal("battleTheme.mp3"));
         battleTheme.setLooping(true);
-        battleTheme.setVolume(0.2f);
+        battleTheme.setVolume(0.3f);
         battleTheme.play();
 
         // Initialize textures to use for game screen
-        background = new Texture("background2.png");
+        background = new Texture("background.png");
         pauseButton = new Texture("pause.png");
         pauseBG = new Texture("transparentBG.png");
         pauseString = new Texture("pausedTitle.png");
@@ -102,14 +105,17 @@ public class GameScreen extends Screens{
         // Spawn ship in specific coordinates
         ship = new Ship(20, 230);
 
+        // Set up health
         shipHealth = "Ship Health: " + ship.getHealth();
         healthBM = new BitmapFont();
 
-        // Initialize arrays
+        // Array of enemies
         enemies = new Array<Enemy>();
 
+        // Start with 10 enemies in the pool, max is 11
         ep = new EnemyPool(10, 11);
 
+        // Array of bullets
         bullets = new Array<Bullet>();
 
         // Initialize sounds
@@ -139,7 +145,9 @@ public class GameScreen extends Screens{
 
             // Pause if pause button is touched
             if(pauseButtonBounds.contains(input.x, input.y)){
+
                 pause();
+
             }
 
             // Move ship if touch position is in left side of screen
@@ -171,22 +179,29 @@ public class GameScreen extends Screens{
 
                 // Game will either resume, go back to menu, or quit
                 if(resumeButtonBounds.contains(input.x, input.y)){
+
                     buttonSound.play(0.5f);
                     resume();
+
                 }
 
+                // Home will lead back to the menu
                 if(homeButtonBounds.contains(input.x, input.y)){
+
                     buttonSound.play(0.5f);
                     sm.setScreen(new MenuScreen(sm));
+
                 }
 
+                // Quit will make the app exit
                 if(quitButtonBounds.contains(input.x, input.y)){
+
                     buttonSound.play(0.5f);
                     disposeSound();
                     dispose();
                     Gdx.app.exit();
-                }
 
+                }
             }
         }
     }
@@ -211,52 +226,60 @@ public class GameScreen extends Screens{
                 // Speed of background loop
                 bgX += 1;
 
+                // Get elapsed time
                 elapsed += 1*Gdx.graphics.getDeltaTime();
 
-                while(elapsed >= 5f){
+                // Add 10 points to score every 5 sec while the ship has more than 0 health
+                while(elapsed >= 5f && ship.getHealth() > 0){
 
                     currentScore += 10;
-
                     score = "Score: " + currentScore;
-
                     elapsed -= 5f;
 
                 }
 
+                // Add enemies to screen
                 spawnEnemy();
 
-                // Update each enemy
                 for(Enemy e : enemies) {
+
+                    // Update each enemy
                     e.update();
 
                     // Subtract health for ship when it still has more than 0
                     // health and collides with enemy bounds
                     if(e.getHealth() > 0 && ship.getHealth() > 0 && e.collides(ship.getBounds())) {
+
                         ship.subtractHP();
+
+                        // Update the ship health string
                         shipHealth = "Ship Health: " + ship.getHealth();
+
+                        // Play ship death sound and dispose the battle theme
                         if (ship.getHealth() <= 0) {
 
                             shipDies.play(0.1f);
                             battleTheme.dispose();
+
                         }
 
-                        // Enemy just dies
+                        // Enemy just dies and the death sound is played
                         e.subtractHP(3);
-
                         enemyDies.play(0.1f);
 
                     }
 
-                        // Remove enemy if it has 0 health and play death sound
+                    // Remove enemy if it has 0 health and play death sound
                     if(e.getHealth() <= 0) {
 
+                        // Added delay to show death animation
                         enemyDeathDelay += 1*Gdx.graphics.getDeltaTime();
 
                         if(enemyDeathDelay >= 1f) {
 
+                            // free() puts the enemy in the pool for re-use
                             ep.free(e);
                             enemies.removeValue(e, false);
-
                             enemyDeathDelay -= 1f;
 
                         }
@@ -268,10 +291,12 @@ public class GameScreen extends Screens{
 
                     // Wait for 2 seconds before screen changes to game over
                     shipDeathDelay += delta;
+
                     if(shipDeathDelay >= 2.0) {
 
                         // Change to game over screen
                         sm.setScreen(new GameOverScreen(sm, currentScore));
+
                     }
                 }
 
@@ -280,10 +305,12 @@ public class GameScreen extends Screens{
 
                 // Update each bullet in array
                 for(Bullet b : bullets){
+
                     b.update();
 
                     // Remove bullet when it reaches end of screen
                     if(b.checkEnd()){
+
                         bullets.removeValue(b, false);
 
                     }
@@ -297,13 +324,13 @@ public class GameScreen extends Screens{
                         if(e.getHealth() > 0 && b.collides(e.getBounds())) {
 
                             e.subtractHP(1);
-
                             enemyHit.play(0.1f);
 
                             if(e.getHealth() <= 0) {
 
                                 enemyDies.play(0.1f);
 
+                                // Add 300 points for each enemy killed by laser
                                 currentScore += 300;
                                 score = "Score: " + currentScore;
                             }
@@ -317,6 +344,7 @@ public class GameScreen extends Screens{
                 break;
 
             case PAUSE:
+
                 break;
 
         }
@@ -333,17 +361,20 @@ public class GameScreen extends Screens{
         sb.draw(background, 0, 0, bgX, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
         for(Enemy e : enemies) {
+
             e.render(sb);
         }
 
         ship.render(sb);
 
         for(Bullet b : bullets) {
+
             sb.draw(b.getTexture(), b.getPosition().x, b.getPosition().y);
         }
 
         sb.draw(pauseButton, AstroBlaster.WIDTH - pauseButton.getWidth() - 10,10);
 
+        // Sets string color to white
         healthBM.setColor(1, 1, 1, 1);
         healthBM.draw(sb, shipHealth, 10, 470);
 
@@ -360,22 +391,27 @@ public class GameScreen extends Screens{
             sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 60);
 
         }
+
         sb.end();
 
     }
 
     // Number of enemies getter
     private Array<Enemy> getEnemies(){
+
         Array<Enemy> ret = new Array<Enemy>();
 
         for(Enemy e : enemies){
 
             if(e instanceof Enemy){
+
                 ret.add((Enemy)e);
+
             }
         }
 
         return ret;
+
     }
 
     // Function when ship fires
@@ -383,6 +419,8 @@ public class GameScreen extends Screens{
 
         // Slow down adding bullets and play sound
         if(System.currentTimeMillis() - lastFire >= 250 && ship.getHealth() > 0){
+
+            // Add bullets to array, and their position will be where the ship is currently at
             bullets.add(new Bullet(ship.getPosition().x + 118, ship.getPosition().y + 7));
             laser.play(0.1f);
             lastFire = System.currentTimeMillis();
@@ -402,9 +440,7 @@ public class GameScreen extends Screens{
 
             // Add enemies to array
             Enemy e = ep.obtain();
-
             e.re_init();
-
             enemies.add(e);
 
             // Reset spawn time
@@ -415,6 +451,7 @@ public class GameScreen extends Screens{
 
     // Pause function for PAUSE state
     public void pause() {
+
         this.state = State.PAUSE;
 
     }
@@ -423,6 +460,7 @@ public class GameScreen extends Screens{
     public void resume(){
 
         if(this.state == State.PAUSE){
+
             this.state = State.RUN;
 
         }
@@ -436,14 +474,17 @@ public class GameScreen extends Screens{
         ship.dispose();
 
         for(Enemy e : enemies){
+
             e.dispose();
 
         }
 
         for(Bullet b : bullets){
+
             b.dispose();
 
         }
+
         pauseBG.dispose();
         pauseString.dispose();
         resumeButton.dispose();
@@ -461,5 +502,4 @@ public class GameScreen extends Screens{
         battleTheme.dispose();
 
     }
-
 }

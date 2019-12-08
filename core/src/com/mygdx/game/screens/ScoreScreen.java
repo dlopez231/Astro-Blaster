@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.mygdx.game.AstroBlaster;
 
+// The leader board screen of the game
 public class ScoreScreen extends Screens {
 
     // Textures for scoreboard screen
@@ -21,15 +22,17 @@ public class ScoreScreen extends Screens {
     private Texture homeButton;
 
     public ScoreScreen(ScreenManager sm) {
+
         super(sm);
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
-        background = new Texture("background2.png");
+        // Initialize textures
+        background = new Texture("background.png");
         scoreTitle = new Texture("Scores Title.png");
         homeButton = new Texture("home.png");
 
-        // Get high scores and store them in string
+        // Get high scores from the preferences and store them in string
         score_1 = "1:   " + myPrefs.getInteger("score_1");
         score_2 = "2:   " + myPrefs.getInteger("score_2");
         score_3 = "3:   " + myPrefs.getInteger("score_3");
@@ -56,18 +59,18 @@ public class ScoreScreen extends Screens {
             Rectangle homeButtonBounds = new Rectangle(720, 20, homeButton.getWidth(), homeButton.getHeight());
 
             if(homeButtonBounds.contains(input.x, input.y)){
+
                 buttonSound.play(0.5f);
                 sm.popScreen();
+
             }
-
         }
-
     }
 
     @Override
     public void update(float delta) {
-        camera.update();
 
+        camera.update();
         handleInput();
 
     }
@@ -97,15 +100,11 @@ public class ScoreScreen extends Screens {
     @Override
     public void dispose(){
 
+        // Dispose everything
         background.dispose();
         scoreTitle.dispose();
         scoreFont.dispose();
         homeButton.dispose();
 
-
     }
-
-
-
-
 }

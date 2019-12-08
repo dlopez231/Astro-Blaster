@@ -25,6 +25,7 @@ public class Ship{
 
     private Rectangle hitbox;
 
+    // Initialize
     public Ship(int x, int y){
 
         position = new Vector2(x, y);
@@ -62,19 +63,23 @@ public class Ship{
 
         elapsed += Gdx.graphics.getDeltaTime();
 
+        // Draw regular animation while health is more than 0
         if(health > 0){
             sb.draw(animation.getKeyFrame(elapsed), position.x, position.y);
         }
+
+        // Else draw it's death animation
         else{
             sb.draw(deathAnimation.getKeyFrame(elapsed), position.x, position.y);
         }
     }
 
-
+    // Position getter
     public Vector2 getPosition() {
         return position;
     }
 
+    // Direction setter
     public void setDirection(float x, float y){
 
         // Ship direction is slowed down
@@ -101,6 +106,7 @@ public class Ship{
 
     public void dispose(){
 
+        // Dispose all textures in animation frames
         Object[] shipFrames = animation.getKeyFrames();
 
         for(int i = 0; i < shipFrames.length; i++){

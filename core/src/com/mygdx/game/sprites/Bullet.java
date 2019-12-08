@@ -30,6 +30,7 @@ public class Bullet {
     }
 
     public void update(){
+
         position.add(direction);
 
         hitbox.setPosition(position.x, position.y);
@@ -46,17 +47,20 @@ public class Bullet {
 
     }
 
+    // Position getter
     public Vector2 getPosition(){
         return position;
     }
 
+    // Check to see if it hits ab enemy
     public boolean collides(Rectangle enemies){
-
 
         return enemies.overlaps(hitbox);
     }
 
+    // Check end to remove bullet
     public boolean checkEnd(){
+
         return position.x >= AstroBlaster.WIDTH;
 
     }
@@ -64,8 +68,5 @@ public class Bullet {
     public void dispose(){
         texture.dispose();
     }
-
-
-
 
 }

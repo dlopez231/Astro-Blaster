@@ -28,6 +28,7 @@ public class Enemy implements Pool.Poolable {
 
     private float elapsed;
 
+    // These are for the random coordinates and speed
     private float x;
     private float y;
     private float speed;
@@ -40,13 +41,13 @@ public class Enemy implements Pool.Poolable {
         deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyDeath.gif").read());
 
         // Random enemy spawn coordinates
-        // Enemies spawn in edge of screen times 1/3rd of screen width size
+        // Enemies spawn in edge of screen (outside of it) times 1/3rd of screen width size
         x = MathUtils.random(AstroBlaster.WIDTH + 75, AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
 
         // Enemies spawn in random height of screen
         y = MathUtils.random(0, AstroBlaster.HEIGHT - 75);
 
-        // Random speed of enemy
+        // Get random speed between 3 and 6
         speed = MathUtils.random(3, 6);
 
         // Set up position
@@ -63,6 +64,7 @@ public class Enemy implements Pool.Poolable {
 
     }
 
+    // Re-initialize the enemy when it's re-used
     public void re_init(){
 
         x = MathUtils.random(AstroBlaster.WIDTH + 75, AstroBlaster.WIDTH + AstroBlaster.WIDTH * 0.3f);
@@ -89,6 +91,7 @@ public class Enemy implements Pool.Poolable {
             position.set(AstroBlaster.WIDTH, y);
         }
 
+        // Hitbox will only be there when it's alive
         if(health > 0) {
             hitbox.setPosition(position.x + 18, position.y + 21);
         }
@@ -98,10 +101,12 @@ public class Enemy implements Pool.Poolable {
 
         elapsed += Gdx.graphics.getDeltaTime();
 
+        // Draw it's default animation
         if(health > 0){
             sb.draw(animation.getKeyFrame(elapsed), position.x, position.y);
         }
 
+        // Else draw it's death animation
         else{
             sb.draw(deathAnimation.getKeyFrame(elapsed), position.x, position.y);
             direction.x = 0;
@@ -109,20 +114,31 @@ public class Enemy implements Pool.Poolable {
         }
     }
 
+    // Checks to see if it hits the ship
     public boolean collides(Rectangle ship){
-
 
         return ship.overlaps(hitbox);
 
     }
 
+    // Hitbox getter
     public Rectangle getBounds(){
         return hitbox;
     }
 
+    public void subtractHP(int hp){
+        health -= hp;
+
+    }
+
+    public int getHealth(){
+        return health;
+
+    }
 
     public void dispose(){
 
+        // Dispose all textures
         Object[] enemyFrames = animation.getKeyFrames();
 
         for(int i = 0; i < enemyFrames.length; i++){
@@ -138,17 +154,6 @@ public class Enemy implements Pool.Poolable {
 
         }
     }
-
-    public void subtractHP(int hp){
-        health -= hp;
-
-    }
-
-    public int getHealth(){
-        return health;
-
-    }
-
 
     @Override
     public void reset() {

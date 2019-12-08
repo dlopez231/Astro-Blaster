@@ -14,8 +14,10 @@ public abstract class Screens {
     // Camera helps with game screen
     protected OrthographicCamera camera;
 
+    // Input for all touch events
     protected Vector3 input;
 
+    // All screens uses the same ScreenManager
     protected ScreenManager sm;
 
     // Preferences to save scores in
@@ -24,8 +26,10 @@ public abstract class Screens {
     // ArrayList to store high scores
     protected ArrayList<Integer> highScores;
 
+    // All screens will use the same button sound
     protected Sound buttonSound;
 
+    // Initialize variables
     protected Screens(ScreenManager sm){
 
         this.sm = sm;
@@ -37,14 +41,19 @@ public abstract class Screens {
 
     }
 
+    // This will be in charge of all input, you would call it in update
     protected abstract void handleInput();
 
+    // Update constantly runs, it handles what most things happen in screen
     public abstract void update(float delta);
 
+    // Put objects that needs to be drawn in render
     public abstract void render(SpriteBatch sb);
 
+    // Always dispose textures, sounds, music, etc.
     public abstract void dispose();
 
+    // Dispose the button sound
     protected void disposeSound(){
 
         buttonSound.dispose();

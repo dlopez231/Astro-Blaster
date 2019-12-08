@@ -12,6 +12,7 @@ public class HelpScreen extends Screens{
     private Texture homeButton;
 
     public HelpScreen(ScreenManager sm){
+
         super(sm);
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
@@ -33,20 +34,18 @@ public class HelpScreen extends Screens{
             Rectangle homeButtonBounds = new Rectangle(720, 20, homeButton.getWidth(), homeButton.getHeight());
 
             if(homeButtonBounds.contains(input.x, input.y)){
+
                 buttonSound.play(0.5f);
                 sm.popScreen();
 
             }
-
         }
-
     }
 
     @Override
     public void update(float delta) {
 
         camera.update();
-
         handleInput();
 
     }
