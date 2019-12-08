@@ -31,9 +31,9 @@ public class Ship{
         direction = new Vector2(0, 0);
 
         animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("ship.gif").read());
-        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("shipTest2.gif").read());
+        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("shipDeath.gif").read());
 
-        hitbox = new Rectangle(x, y, 122, 70);
+        hitbox = new Rectangle(x, y, 100, 65);
 
         health = 3;
 

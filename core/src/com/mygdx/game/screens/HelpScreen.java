@@ -19,7 +19,6 @@ public class HelpScreen extends Screens{
         helpScreen = new Texture("helpBG.png");
         homeButton = new Texture("home.png");
 
-
     }
 
     @Override
@@ -31,9 +30,10 @@ public class HelpScreen extends Screens{
 
             camera.unproject(input);
 
-            Rectangle homeButtonBounds = new Rectangle(740, 20, homeButton.getWidth(), homeButton.getHeight());
+            Rectangle homeButtonBounds = new Rectangle(720, 20, homeButton.getWidth(), homeButton.getHeight());
 
             if(homeButtonBounds.contains(input.x, input.y)){
+                buttonSound.play(0.5f);
                 sm.popScreen();
 
             }
@@ -59,7 +59,7 @@ public class HelpScreen extends Screens{
         sb.begin();
 
         sb.draw(helpScreen, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-        sb.draw(homeButton, 740, 20);
+        sb.draw(homeButton, 720, 20);
 
         sb.end();
 

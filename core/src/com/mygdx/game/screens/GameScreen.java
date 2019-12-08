@@ -80,17 +80,17 @@ public class GameScreen extends Screens{
 
         camera.setToOrtho(false, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
 
-//        battleTheme = Gdx.audio.newMusic(Gdx.files.internal("battleTheme.mp3"));
-//        battleTheme.setLooping(true);
-//        battleTheme.setVolume(0.4f);
-//        battleTheme.play();
+        battleTheme = Gdx.audio.newMusic(Gdx.files.internal("battleTheme.mp3"));
+        battleTheme.setLooping(true);
+        battleTheme.setVolume(0.2f);
+        battleTheme.play();
 
         // Initialize textures to use for game screen
         background = new Texture("background2.png");
         pauseButton = new Texture("pause.png");
         pauseBG = new Texture("transparentBG.png");
         pauseString = new Texture("pausedTitle.png");
-        resumeButton = new Texture("resume.png");
+        resumeButton = new Texture("play.png");
         homeButton = new Texture("home.png");
         quitButton = new Texture("Quit Button.png");
 
@@ -109,10 +109,6 @@ public class GameScreen extends Screens{
         enemies = new Array<Enemy>();
 
         ep = new EnemyPool(10, 11);
-
-        System.out.println(ep.getFree());
-
-        System.out.println(ep.getFree());
 
         bullets = new Array<Bullet>();
 
@@ -175,14 +171,18 @@ public class GameScreen extends Screens{
 
                 // Game will either resume, go back to menu, or quit
                 if(resumeButtonBounds.contains(input.x, input.y)){
+                    buttonSound.play(0.5f);
                     resume();
                 }
 
                 if(homeButtonBounds.contains(input.x, input.y)){
+                    buttonSound.play(0.5f);
                     sm.setScreen(new MenuScreen(sm));
                 }
 
                 if(quitButtonBounds.contains(input.x, input.y)){
+                    buttonSound.play(0.5f);
+                    disposeSound();
                     dispose();
                     Gdx.app.exit();
                 }
@@ -236,14 +236,14 @@ public class GameScreen extends Screens{
                         shipHealth = "Ship Health: " + ship.getHealth();
                         if (ship.getHealth() <= 0) {
 
-                            shipDies.play(0.2f);
-//                            battleTheme.dispose();
+                            shipDies.play(0.1f);
+                            battleTheme.dispose();
                         }
 
                         // Enemy just dies
                         e.subtractHP(3);
 
-                        enemyDies.play(0.04f);
+                        enemyDies.play(0.1f);
 
                     }
 
@@ -298,11 +298,11 @@ public class GameScreen extends Screens{
 
                             e.subtractHP(1);
 
-                            enemyHit.play(0.03f);
+                            enemyHit.play(0.1f);
 
                             if(e.getHealth() <= 0) {
 
-                                enemyDies.play(0.04f);
+                                enemyDies.play(0.1f);
 
                                 currentScore += 300;
                                 score = "Score: " + currentScore;
@@ -383,7 +383,7 @@ public class GameScreen extends Screens{
 
         // Slow down adding bullets and play sound
         if(System.currentTimeMillis() - lastFire >= 250 && ship.getHealth() > 0){
-            bullets.add(new Bullet(ship.getPosition().x + 121, ship.getPosition().y + 9));
+            bullets.add(new Bullet(ship.getPosition().x + 118, ship.getPosition().y + 7));
             laser.play(0.1f);
             lastFire = System.currentTimeMillis();
 
@@ -458,7 +458,7 @@ public class GameScreen extends Screens{
         healthBM.dispose();
         scoreBM.dispose();
 
-//        battleTheme.dispose();
+        battleTheme.dispose();
 
     }
 

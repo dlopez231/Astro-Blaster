@@ -2,6 +2,7 @@ package com.mygdx.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
@@ -21,7 +22,9 @@ public abstract class Screens {
     protected Preferences myPrefs;
 
     // ArrayList to store high scores
-    public ArrayList<Integer> highScores;
+    protected ArrayList<Integer> highScores;
+
+    protected Sound buttonSound;
 
     protected Screens(ScreenManager sm){
 
@@ -30,6 +33,7 @@ public abstract class Screens {
         input = new Vector3();
         myPrefs = Gdx.app.getPreferences("Game Scores");
         highScores = new ArrayList<Integer>();
+        buttonSound = Gdx.audio.newSound(Gdx.files.internal("buttonSound.ogg"));
 
     }
 
@@ -40,5 +44,10 @@ public abstract class Screens {
     public abstract void render(SpriteBatch sb);
 
     public abstract void dispose();
+
+    protected void disposeSound(){
+
+        buttonSound.dispose();
+    }
 
 }

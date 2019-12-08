@@ -28,7 +28,7 @@ public class GameOverScreen extends Screens{
         // Initialize textures
         background = new Texture("background2.png");
         gameOver = new Texture("gameover.png");
-        replayButton = new Texture("replay.png");
+        replayButton = new Texture("play.png");
         homeButton = new Texture("home.png");
         quitButton = new Texture("Quit Button.png");
         finalScore = "FINAL SCORE: " + score;
@@ -51,21 +51,25 @@ public class GameOverScreen extends Screens{
             input.set(Gdx.input.getX(), Gdx.input.getY(), 0);
             camera.unproject(input);
 
-            Rectangle replayButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - replayButton.getWidth() / 2, 240, replayButton.getWidth(), replayButton.getHeight());
-            Rectangle homeButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - homeButton.getWidth() / 2, 150, homeButton.getWidth(), homeButton.getHeight());
-            Rectangle quitButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - quitButton.getWidth() / 2, 60, quitButton.getWidth(), quitButton.getHeight());
+            Rectangle replayButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - replayButton.getWidth() / 2, 230, replayButton.getWidth(), replayButton.getHeight());
+            Rectangle homeButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - homeButton.getWidth() / 2, 140, homeButton.getWidth(), homeButton.getHeight());
+            Rectangle quitButtonBounds = new Rectangle(AstroBlaster.WIDTH / 2 - quitButton.getWidth() / 2, 50, quitButton.getWidth(), quitButton.getHeight());
 
             if (replayButtonBounds.contains(input.x, input.y)){
+                buttonSound.play(0.5f);
                 sm.setScreen(new GameScreen(sm));
 
             }
 
             if(homeButtonBounds.contains(input.x, input.y)){
+                buttonSound.play(0.5f);
                 sm.setScreen(new MenuScreen(sm));
 
             }
 
             if(quitButtonBounds.contains(input.x, input.y)){
+                buttonSound.play(0.5f);
+                disposeSound();
                 dispose();
                 Gdx.app.exit();
             }
@@ -87,16 +91,16 @@ public class GameOverScreen extends Screens{
 
         sb.begin();
         sb.draw(background, 0, 0, AstroBlaster.WIDTH, AstroBlaster.HEIGHT);
-        sb.draw(gameOver, (AstroBlaster.WIDTH/2) - (gameOver.getWidth() / 2), 370);
-        sb.draw(replayButton, (AstroBlaster.WIDTH/2) - (replayButton.getWidth()/2), 240);
-        sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 150);
-        sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 60);
+        sb.draw(gameOver, (AstroBlaster.WIDTH/2) - (gameOver.getWidth() / 2), 380);
+        sb.draw(replayButton, (AstroBlaster.WIDTH/2) - (replayButton.getWidth()/2), 220);
+        sb.draw(homeButton, (AstroBlaster.WIDTH/2) - (homeButton.getWidth()/2), 130);
+        sb.draw(quitButton, (AstroBlaster.WIDTH/2) - (quitButton.getWidth()/2), 40);
 
         // How to get middle coordinates of string with custom font
         GlyphLayout gl = new GlyphLayout();
         gl.setText(scoreFont, finalScore);
         float temp = gl.width;
-        scoreFont.draw(sb, finalScore, (AstroBlaster.WIDTH / 2) - (temp / 2), 320);
+        scoreFont.draw(sb, finalScore, (AstroBlaster.WIDTH / 2) - (temp / 2), 335);
 
         sb.end();
 

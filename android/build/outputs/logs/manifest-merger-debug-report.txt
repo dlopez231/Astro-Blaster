@@ -40,7 +40,7 @@ ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidM
 	android:screenOrientation
 		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:15:13-50
 	android:label
-		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:14:13-45
+		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:14:13-42
 	android:configChanges
 		ADDED from C:\Users\Dianne Lopez\Desktop\AstroBlasterPrototype2\android\AndroidManifest.xml:16:13-107
 	android:name

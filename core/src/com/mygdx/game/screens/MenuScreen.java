@@ -18,7 +18,6 @@ public class MenuScreen extends Screens{
     private Animation<TextureRegion> title;
     private float elapsed;
 
-
     private Texture background;
     private Texture startButton;
     private Texture helpButton;
@@ -74,19 +73,24 @@ public class MenuScreen extends Screens{
 
             // Screens will change is user's touch is in specific bounds
             if (playButtonBounds.contains(input.x, input.y)) {
+                buttonSound.play(0.5f);
                 sm.setScreen(new GameScreen(sm));
             }
 
             if(helpButtonBounds.contains(input.x, input.y)) {
+                buttonSound.play(0.5f);
                 sm.pushScreen(new HelpScreen(sm));
             }
 
             if(scoreButtonBounds.contains(input.x, input.y)) {
+                buttonSound.play(0.5f);
                 sm.pushScreen(new ScoreScreen(sm));
             }
 
             if(quitButtonBounds.contains(input.x, input.y)) {
+                buttonSound.play(0.5f);
                 dispose();
+                disposeSound();
                 Gdx.app.exit();
             }
         }

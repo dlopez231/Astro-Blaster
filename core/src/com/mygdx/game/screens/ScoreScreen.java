@@ -53,9 +53,10 @@ public class ScoreScreen extends Screens {
 
             camera.unproject(input);
 
-            Rectangle homeButtonBounds = new Rectangle(740, 20, homeButton.getWidth(), homeButton.getHeight());
+            Rectangle homeButtonBounds = new Rectangle(720, 20, homeButton.getWidth(), homeButton.getHeight());
 
             if(homeButtonBounds.contains(input.x, input.y)){
+                buttonSound.play(0.5f);
                 sm.popScreen();
             }
 
@@ -87,7 +88,7 @@ public class ScoreScreen extends Screens {
         scoreFont.draw(sb, score_4, 330, 170);
         scoreFont.draw(sb, score_5, 330, 120);
 
-        sb.draw(homeButton, 740, 20);
+        sb.draw(homeButton, 720, 20);
 
         sb.end();
 

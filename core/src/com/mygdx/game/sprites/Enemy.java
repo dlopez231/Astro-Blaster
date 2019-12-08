@@ -36,8 +36,8 @@ public class Enemy implements Pool.Poolable {
     public Enemy(){
 //    public void init(){
 
-        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest.gif").read());
-        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyTest2.gif").read());
+        animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemy.gif").read());
+        deathAnimation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP, Gdx.files.internal("enemyDeath.gif").read());
 
         // Random enemy spawn coordinates
         // Enemies spawn in edge of screen times 1/3rd of screen width size
@@ -56,7 +56,7 @@ public class Enemy implements Pool.Poolable {
         direction = new Vector2(-speed, 0);
 
         // Update bounds along with enemy texture coordinates
-        hitbox = new Rectangle(position.x, position.y, 75, 75);
+        hitbox = new Rectangle(position.x + 18, position.y + 20, 53, 75);
 
         // Enemies have 3 health
         health = 3;
@@ -90,7 +90,7 @@ public class Enemy implements Pool.Poolable {
         }
 
         if(health > 0) {
-            hitbox.setPosition(position.x, position.y);
+            hitbox.setPosition(position.x + 18, position.y + 21);
         }
     }
 
